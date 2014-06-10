@@ -16,6 +16,7 @@ import rubamazzo.SituazioneRubamazzo;
 import slot.Rollata;
 import tombola.SituazioneTombola;
 import userModel.Utente;
+import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
 import encodec.Encoder;
 
@@ -149,74 +150,32 @@ public class Comunicazione {
 		serverLog.login(client, username, password);
 	}
 	
-	public void registraSocket(String username, String password, String confPassword, String nome, String cognome){
-		writer.print(Encoder.clientRegistra(username, password, confPassword, nome, cognome));
+	public RmiTaskControl registrarmi(String username, String password, String confPassword, String nome, String cognome){
+		serverLog.registra(client, username,password,confPassword, nome, cognome);
 	}
 	
-	public void aggTombolaSocket(){
-		writer.print(Encoder.clientAggiornaTombola);
+	public SituazioneTombola aggTombolarmi(){
+		return server.aggTombola();
 	}
 	
-	public void aggRubamazzoSocket(){
-		writer.print(Encoder.clientAggiornaRubamazzo);
+	public SituazioneRubamazzo aggRubamazzoRmi(){
+		return server.aggRubaMazzo();
 	}
 	
-	public void aggClassSocket(){
-		writer.print(Encoder.clientAggiornaClassifica);
+	public ArrayList<Utente> aggClassGlobaleRmi() throws EccezioneClassificaVuota{
+		return server.aggClassGiorn();
 	}
 	
-	public void mossaRubamazzoSocket(Mossa m, int numPartita){
-		writer.print(Encoder.mossaRubamazzo(m));
+	public boolean mossaRubamazzoRmi(Mossa m, int numPartita){
+		return server.mossaRubamazzo(m, numPartita);
 	}
 	
-	public void vintoTombolaSocket(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga){
-		writer.print(Encoder.vintoTombola(numPartita,tipoVittoria,indiceCartella,indiceRiga));
+	public boolean vintoTombolaRmi(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga){
+		return server.vintoTombola(numPartita, tipoVittoria, indiceCartella, indiceRiga);
 	}
 	
-	public void rollaSocket(){
-		writer.print(Encoder.clientRolla);
-	}
-	
-	public SituazioneTombola riceviAggTombolaSocket() throws IOException{
-		String s = reader.readLine();
-		SituazioneTombola sit = Decoder.clientAggTombola(s);
-		return sit;
-	}
-	
-	public SituazioneRubamazzo riceviAggRubamazzoSocket() throws IOException{
-		String s = reader.readLine();
-		SituazioneRubamazzo sit = Decoder.clientAggRubamazzo(s); 
-		return sit;
-	}
-	
-	public Rollata riceviRollaSocket(){
-		String s = reader.readLine();
-		Rollata r = Decoder.clientRollata(s);
-		return r;
-	}
-	
-	public Utente riceviLoginSocket() throws IOException{
-		String s = reader.readLine();
-		Utente u = Decoder.clientLogin(s);
-		return u;
-	}
-	
-	public Utente riceviRegistraSocket(){
-		String s = reader.readLine();
-		Utente u = Decoder.clientRegistra(s);
-		return u;
-	}
-	
-	public ArrayList<String> riceviClassificaGlobaleSocket(){
-		String s = reader.readLine();
-		ArrayList<String> c = Decoder.clientClassificaGlobale(s);
-		return c;
-	}
-	
-	public ArrayList<String> riceviClassificaGiornalieraSocket(){
-		String s = reader.readLine();
-		ArrayList<String> c = Decoder.clientClassificaGiornaliera(s);
-		return c;
+	public Rollata rollaRmi(){
+		return server.rolla();
 	}
 	
 	
