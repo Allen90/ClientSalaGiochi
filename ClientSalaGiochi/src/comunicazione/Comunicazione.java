@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import classifica.Classifica;
 import rmiClient.ClientRmi;
 import rmiServer.RmiServer;
 import rmiServer.RmiTaskControl;
@@ -83,11 +83,11 @@ public class Comunicazione {
 	}
 	
 	public void mossaRubamazzoSocket(Mossa m, int numPartita){
-		writer.print(Encoder.mossaRubamazzo(m));
+		writer.print(Encoder.clientMossaRubamazzo(m));
 	}
 	
 	public void vintoTombolaSocket(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga){
-		writer.print(Encoder.vintoTombola(numPartita,tipoVittoria,indiceCartella,indiceRiga));
+		writer.print(Encoder.clientVintoTombola(numPartita,tipoVittoria,indiceCartella,indiceRiga));
 	}
 	
 	public void rollaSocket(){
@@ -146,12 +146,12 @@ public class Comunicazione {
 		return server.giocoRubamazzo();
 	}
 	
-	public RmiTaskControl loginRmi(String username,String password){
-		serverLog.login(client, username, password);
+	public RmiTaskControl loginRmi(String username,String password) throws RemoteException, EccezioneUtente{
+		return serverLog.login(client, username, password);
 	}
 	
-	public RmiTaskControl registrarmi(String username, String password, String confPassword, String nome, String cognome){
-		serverLog.registra(client, username,password,confPassword, nome, cognome);
+	public RmiTaskControl registrarmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
+		return serverLog.registra(client, username,password,confPassword, nome, cognome);
 	}
 	
 	public SituazioneTombola aggTombolarmi(){
