@@ -15,20 +15,20 @@ import rubamazzo.Mossa;
 import rubamazzo.SituazioneRubamazzo;
 import slot.Rollata;
 import tombola.SituazioneTombola;
+import userModel.InfoHome;
 import userModel.Utente;
 import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
 import encodec.Encoder;
 
 public class Comunicazione {
-	private PrintWriter writer = null;
+	
 	private BufferedReader reader = null;
 	private boolean tipoCom;
 	private RmiTaskControl server;
 	private RmiServer serverLog;
 	private ClientRmi client;
-	
-	
+	private PrintWriter writer = null;
 	// modficare login, registrazione rmi
 	
 	
@@ -112,31 +112,33 @@ public class Comunicazione {
 		return r;
 	}
 	
-	public Utente riceviLoginSocket() throws IOException{
+	public InfoHome riceviLoginSocket() throws IOException{
 		String s = reader.readLine();
-		Utente u = Decoder.clientLogin(s);
-		return u;
+		InfoHome ih = Decoder.clientLogin(s);
+		return ih;
 	}
 	
-	public Utente riceviRegistraSocket(){
+	public InfoHome riceviRegistraSocket(){
 		String s = reader.readLine();
-		Utente u = Decoder.clientRegistra(s);
-		return u;
+		InfoHome ih = Decoder.clientRegistra(s);
+		return ih;
 	}
 	
-	public ArrayList<String> riceviClassificaGlobaleSocket(){
+	public ArrayList<Utente> riceviClassificaGlobaleSocket(){
 		String s = reader.readLine();
-		ArrayList<String> c = Decoder.clientClassificaGlobale(s);
+		ArrayList<Utente> c = Decoder.clientClassificaGlobale(s);
 		return c;
 	}
 	
-	public ArrayList<String> riceviClassificaGiornalieraSocket(){
+	public ArrayList<Utente> riceviClassificaGiornalieraSocket(){
 		String s = reader.readLine();
-		ArrayList<String> c = Decoder.clientClassificaGiornaliera(s);
+		ArrayList<Utente> c = Decoder.clientClassificaGiornaliera(s);
 		return c;
 	}
 	
-	
+	public InfoHome getInfoHome(){
+		return server.getInfoHome();
+	}
 	
 	public boolean giocoTombolaRmi(int numCartelle) throws EccezioneUtente{
 		return server.giocoTombola(numCartelle);
@@ -150,7 +152,11 @@ public class Comunicazione {
 		return serverLog.login(client, username, password);
 	}
 	
+<<<<<<< HEAD
+	public RmiTaskControl registraRmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
+=======
 	public RmiTaskControl registrarmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
+>>>>>>> branch 'master' of https://github.com/Allen90/ClientSalaGiochi
 		return serverLog.registra(client, username,password,confPassword, nome, cognome);
 	}
 	
@@ -163,6 +169,10 @@ public class Comunicazione {
 	}
 	
 	public ArrayList<Utente> aggClassGlobaleRmi() throws EccezioneClassificaVuota{
+		return server.aggClass();
+	}
+	
+	public ArrayList<Utente> aggClassGiornRmi() throws EccezioneClassificaVuota{
 		return server.aggClassGiorn();
 	}
 	
@@ -177,6 +187,7 @@ public class Comunicazione {
 	public Rollata rollaRmi(){
 		return server.rolla();
 	}
+
 	
 	
 	

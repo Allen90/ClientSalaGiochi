@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,30 +16,32 @@ import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class FramePrincipale extends JFrame {
+import comunicazione.Comunicazione;
+import slot.Slot;
+import userModel.Utente;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import javax.swing.SwingConstants;
+
+import eccezioni.EccezioneClassificaVuota;
+
+public class FramePrincipale extends JFrame implements Runnable{
 
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FramePrincipale frame = new FramePrincipale();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private Utente utente;
+	private Comunicazione comunicazione;
+	private SlotFrame slot;
+	private boolean finito;
+	private ArrayList<Utente> classGlob;
+	private ArrayList<Utente> classGiorn;
 
 	/**
 	 * Create the frame.
 	 */
-	public FramePrincipale() {
+	public FramePrincipale(String username,int crediti,final Comunicazione comunicazione) {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -48,68 +52,113 @@ public class FramePrincipale extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 448, 271);
 		contentPane.add(tabbedPane);
-		
-				JPanel panel = new JPanel();
-				tabbedPane.addTab("Giochi", null, panel, null);
-				panel.setLayout(null);
+
+		JPanel pnlHome = new JPanel();
+		tabbedPane.addTab("Giochi", null, pnlHome, null);
+		pnlHome.setLayout(null);
+
+		JLabel lblUsername = new JLabel("UserName");
+		lblUsername.setBounds(12, 12, 87, 15);
+		pnlHome.add(lblUsername);
+
+		JLabel labelUsername = new JLabel(username);
+		labelUsername.setBounds(102, 12, 70, 15);
+		pnlHome.add(labelUsername);
+
+		JLabel Crediti = new JLabel("Crediti");
+		Crediti.setBounds(221, 12, 70, 15);
+		pnlHome.add(Crediti);
+
+		JLabel labelCrediti = new JLabel(""+crediti);
+		labelCrediti.setBounds(289, 12, 70, 15);
+		pnlHome.add(labelCrediti);
+
+		JButton btnSlot = new JButton("Slot");
+		btnSlot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				
-						JLabel lblUsername = new JLabel("UserName");
-						lblUsername.setBounds(12, 12, 87, 15);
-						panel.add(lblUsername);
-						
-								JLabel lblNewLabel = new JLabel("New label");
-								lblNewLabel.setBounds(102, 12, 70, 15);
-								panel.add(lblNewLabel);
-								
-										JLabel lblCrediti = new JLabel("Crediti:");
-										lblCrediti.setBounds(221, 12, 70, 15);
-										panel.add(lblCrediti);
-										
-												JLabel lblNewLabel_1 = new JLabel("New label");
-												lblNewLabel_1.setBounds(289, 12, 70, 15);
-												panel.add(lblNewLabel_1);
-												
-														JButton btnNewButton = new JButton("Slot");
-														btnNewButton.setBounds(12, 111, 117, 25);
-														panel.add(btnNewButton);
-														
-																JButton btnNewButton_1 = new JButton("Tombola");
-																btnNewButton_1.setBounds(167, 111, 117, 25);
-																panel.add(btnNewButton_1);
-																
-																		JButton btnNewButton_2 = new JButton("Rubamazzo");
-																		btnNewButton_2.setBounds(314, 111, 117, 25);
-																		panel.add(btnNewButton_2);
-																				
-																				JComboBox comboBox = new JComboBox();
-																				comboBox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
-																				comboBox.setSelectedIndex(0);
-																				comboBox.setBounds(214, 148, 70, 24);
-																				panel.add(comboBox);
-																				
-																				JButton btnLogout = new JButton("Logout");
-																				btnLogout.setBounds(314, 207, 117, 25);
-																				panel.add(btnLogout);
-																				
-																						JPanel panel_1 = new JPanel();
-																						tabbedPane.addTab("Classifica", null, panel_1, null);
-																						panel_1.setLayout(null);
-																						
-																								JLabel lblGlobale = new JLabel("Globale");
-																								lblGlobale.setBounds(12, 12, 70, 15);
-																								panel_1.add(lblGlobale);
-																								
-																										JLabel lblGiornaliera = new JLabel("Giornaliera");
-																										lblGiornaliera.setBounds(240, 12, 99, 15);
-																										panel_1.add(lblGiornaliera);
-																										
-																												JTextArea textArea = new JTextArea();
-																												textArea.setEditable(false);
-																												textArea.setBounds(12, 39, 170, 193);
-																												panel_1.add(textArea);
-																												
-																														JTextArea textArea_1 = new JTextArea();
-																														textArea_1.setBounds(240, 39, 191, 193);
-																														panel_1.add(textArea_1);
+				slot = new SlotFrame(comunicazione);
+							
+
+			}
+		});
+		btnSlot.setBounds(12, 111, 117, 25);
+		pnlHome.add(btnSlot);
+
+		JButton btnTombola = new JButton("Tombola");
+		btnTombola.setBounds(167, 111, 117, 25);
+		pnlHome.add(btnTombola);
+
+		JButton btnRubamazzo = new JButton("Rubamazzo");
+		btnRubamazzo.setBounds(314, 111, 117, 25);
+		pnlHome.add(btnRubamazzo);
+
+		JComboBox comboTombola = new JComboBox();
+		comboTombola.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
+		comboTombola.setSelectedIndex(0);
+		comboTombola.setBounds(192, 175, 70, 24);
+		pnlHome.add(comboTombola);
+
+		JButton btnLogout = new JButton("Logout");
+		btnLogout.setBounds(314, 207, 117, 25);
+		pnlHome.add(btnLogout);
+
+		JLabel lblNewLabel = new JLabel("Num Cartelle");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblNewLabel.setBounds(148, 148, 114, 15);
+		pnlHome.add(lblNewLabel);
+
+		JPanel pnlClassifica = new JPanel();
+		tabbedPane.addTab("Classifica", null, pnlClassifica, null);
+		pnlClassifica.setLayout(null);
+
+		JLabel lblGlobale = new JLabel("Globale");
+		lblGlobale.setBounds(12, 12, 70, 15);
+		pnlClassifica.add(lblGlobale);
+
+		JLabel lblGiornaliera = new JLabel("Giornaliera");
+		lblGiornaliera.setBounds(240, 12, 99, 15);
+		pnlClassifica.add(lblGiornaliera);
+
+		JTextArea areaGlobale = new JTextArea();
+		areaGlobale.setEditable(false);
+		areaGlobale.setBounds(12, 39, 170, 193);
+		pnlClassifica.add(areaGlobale);
+
+		JTextArea areaGiornaliera = new JTextArea();
+		areaGiornaliera.setBounds(240, 39, 191, 193);
+		pnlClassifica.add(areaGiornaliera);
+		
+		JButton btnAggClass = new JButton("A");
+		btnAggClass.setBounds(407, 7, 24, 25);
+		pnlClassifica.add(btnAggClass);
+	}
+	
+	public void run(){
+		while(finito == false){
+			try {
+				Thread.sleep(20000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(comunicazione.getTipoCom()){
+				comunicazione.aggClassSocket();
+				classGlob = comunicazione.riceviClassificaGlobaleSocket();
+				classGiorn = comunicazione.riceviClassificaGiornalieraSocket();
+			}
+			else{
+				try {
+					classGiorn = comunicazione.aggClassGlobaleRmi();
+					classGlob = comunicazione.aggClassGiornRmi();
+				} catch (EccezioneClassificaVuota e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		}
 	}
 }

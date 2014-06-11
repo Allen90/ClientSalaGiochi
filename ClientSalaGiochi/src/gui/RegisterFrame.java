@@ -8,37 +8,38 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import rmiServer.RmiServer;
+import rmiServer.RmiTaskControl;
+import userModel.InfoHome;
+import userModel.Utente;
+import comunicazione.Comunicazione;
+import eccezioni.EccezioneUtente;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.rmi.RemoteException;
 
 public class RegisterFrame extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RegisterFrame frame = new RegisterFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTextField textNome;
+	private JTextField textCognome;
+	private JTextField textUsername;
+	private JTextField textPassword;
+	private JTextField textConfPass;
+	private Comunicazione comunicazione;
+	private FramePrincipale home;
+	private RmiServer rmiLog;
+	private RmiTaskControl rmi;
 
 	/**
 	 * Create the frame.
 	 */
-	public RegisterFrame() {
+	public RegisterFrame(final Comunicazione comunicazione) {
+		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -66,33 +67,75 @@ public class RegisterFrame extends JFrame {
 		lblPasswordConfimation.setBounds(12, 180, 185, 15);
 		contentPane.add(lblPasswordConfimation);
 		
-		JButton btnNewButton = new JButton("Invia");
-		btnNewButton.setBounds(294, 236, 144, 25);
-		contentPane.add(btnNewButton);
+		JButton btnRegistra = new JButton("Registra");
+		btnRegistra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(textUsername.getText() == "" && textPassword.getText() == "" && textNome.getText() == "" && textCognome.getText() == "" && textConfPass.getText() == ""){
+					// dialog
+				}
+
+				else{
+					if(comunicazione.getTipoCom()){
+						comunicazione.registraSocket(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
+						InfoHome ih = null;
+						ih = comunicazione.riceviRegistraSocket();
+							if(ih == null){
+								JOptionPane.showMessageDialog(null, "Errore nella registrazione");
+							}
+							else{
+								home = new FramePrincipale(ih.getUsername(),ih.getCrediti(),comunicazione);
+								home.show();
+							}
+					}
+					else{
+						try {
+							rmi = comunicazione.registraRmi(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
+							if(rmi == null){
+								JOptionPane.showMessageDialog(null, "Errore nella registrazione");
+							}
+							else{
+								Comunicazione c = new Comunicazione(rmi);
+								InfoHome ih = c.getInfoHome();
+								home = new FramePrincipale(ih.getUsername(),ih.getCrediti(),c);
+								home.show();
+							}
+						} catch (RemoteException | EccezioneUtente e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+					}
+				}
+
+			}
+		});
+		btnRegistra.setBounds(294, 236, 144, 25);
+		contentPane.add(btnRegistra);
 		
-		textField = new JTextField();
-		textField.setBounds(190, 10, 114, 19);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		textNome = new JTextField();
+		textNome.setBounds(190, 10, 114, 19);
+		contentPane.add(textNome);
+		textNome.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(190, 53, 114, 19);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		textCognome = new JTextField();
+		textCognome.setBounds(190, 53, 114, 19);
+		contentPane.add(textCognome);
+		textCognome.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(190, 91, 114, 19);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
+		textUsername = new JTextField();
+		textUsername.setBounds(190, 91, 114, 19);
+		contentPane.add(textUsername);
+		textUsername.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(190, 135, 114, 19);
-		contentPane.add(textField_3);
-		textField_3.setColumns(10);
+		textPassword = new JTextField();
+		textPassword.setBounds(190, 135, 114, 19);
+		contentPane.add(textPassword);
+		textPassword.setColumns(10);
 		
-		textField_4 = new JTextField();
-		textField_4.setBounds(190, 178, 114, 19);
-		contentPane.add(textField_4);
-		textField_4.setColumns(10);
+		textConfPass = new JTextField();
+		textConfPass.setBounds(190, 178, 114, 19);
+		contentPane.add(textConfPass);
+		textConfPass.setColumns(10);
 	}
 }

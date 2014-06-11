@@ -14,10 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import comunicazione.Comunicazione;
+
 public class SlotFrame extends JFrame {
 
 	private JPanel contentPane;
-
+	private Comunicazione comunicazione;
 	/**
 	 * Launch the application.
 	 */
@@ -37,7 +39,8 @@ public class SlotFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public SlotFrame() {
+	public SlotFrame(Comunicazione comunicazione) {
+		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
