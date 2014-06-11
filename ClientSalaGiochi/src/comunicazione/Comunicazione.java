@@ -19,6 +19,7 @@ import userModel.InfoHome;
 import userModel.Utente;
 import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
+import encodec.Decoder;
 import encodec.Encoder;
 
 public class Comunicazione {
@@ -106,7 +107,7 @@ public class Comunicazione {
 		return sit;
 	}
 	
-	public Rollata riceviRollaSocket(){
+	public Rollata riceviRollaSocket() throws IOException{
 		String s = reader.readLine();
 		Rollata r = Decoder.clientRollata(s);
 		return r;
@@ -114,29 +115,29 @@ public class Comunicazione {
 	
 	public InfoHome riceviLoginSocket() throws IOException{
 		String s = reader.readLine();
-		InfoHome ih = Decoder.clientLogin(s);
+		InfoHome ih = Decoder.clientAccesso(s);
 		return ih;
 	}
 	
-	public InfoHome riceviRegistraSocket(){
+	public InfoHome riceviRegistraSocket() throws IOException{
 		String s = reader.readLine();
-		InfoHome ih = Decoder.clientRegistra(s);
+		InfoHome ih = Decoder.clientAccesso(s);
 		return ih;
 	}
 	
-	public ArrayList<Utente> riceviClassificaGlobaleSocket(){
+	public ArrayList<String> riceviClassificaGlobaleSocket() throws IOException{
 		String s = reader.readLine();
-		ArrayList<Utente> c = Decoder.clientClassificaGlobale(s);
+		ArrayList<String> c = Decoder.clientClassificaGlobale(s);
 		return c;
 	}
 	
-	public ArrayList<Utente> riceviClassificaGiornalieraSocket(){
+	public ArrayList<String> riceviClassificaGiornalieraSocket() throws IOException{
 		String s = reader.readLine();
-		ArrayList<Utente> c = Decoder.clientClassificaGiornaliera(s);
+		ArrayList<String> c = Decoder.clientClassificaGiornaliera(s);
 		return c;
 	}
 	
-	public InfoHome getInfoHome(){
+	public InfoHome getInfoHome() throws EccezioneUtente{
 		return server.getInfoHome();
 	}
 	
