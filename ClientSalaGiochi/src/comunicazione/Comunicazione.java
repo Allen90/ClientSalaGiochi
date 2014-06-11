@@ -152,11 +152,8 @@ public class Comunicazione {
 		return serverLog.login(client, username, password);
 	}
 	
-<<<<<<< HEAD
-	public RmiTaskControl registraRmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
-=======
+
 	public RmiTaskControl registrarmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
->>>>>>> branch 'master' of https://github.com/Allen90/ClientSalaGiochi
 		return serverLog.registra(client, username,password,confPassword, nome, cognome);
 	}
 	

@@ -83,7 +83,7 @@ public class ClientStartGUI {
 					try {
 						socket = new Socket(host , port);
 						comunicazione = new Comunicazione(socket);
-						resitra = new RegisterFrame(comunicazione);
+						register = new RegisterFrame(comunicazione);
 					}
 					catch(Exception e1){
 						

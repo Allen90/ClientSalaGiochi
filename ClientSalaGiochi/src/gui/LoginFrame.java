@@ -31,6 +31,7 @@ public class LoginFrame extends JFrame {
 	private Comunicazione comunicazione;
 	private FramePrincipale home;
 	private RmiTaskControl rmi;
+	private JButton btnLogin;
 
 	/**
 	 * Create the frame.
@@ -66,7 +67,7 @@ public class LoginFrame extends JFrame {
 		lblInserisciLeInformazioni.setBounds(12, 12, 410, 15);
 		contentPane.add(lblInserisciLeInformazioni);
 
-		JButton btnLogin = new JButton("Login");
+		btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(textUsername.getText() == "" && textPassword.getText() == ""){
