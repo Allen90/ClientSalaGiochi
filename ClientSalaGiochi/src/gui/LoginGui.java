@@ -85,7 +85,7 @@ public class LoginGui extends JFrame {
 								JOptionPane.showMessageDialog(null, "Login errato");
 							}
 							else{
-								home = new FramePrincipale(ih.getUsername(),ih.getCrediti(),comunicazione);
+								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
 								home.show();
 							}
 						} catch (IOException e1) {
@@ -102,7 +102,7 @@ public class LoginGui extends JFrame {
 							else{
 								Comunicazione c = new Comunicazione(rmi);
 								InfoHome ih = c.getInfoHome();
-								home = new FramePrincipale(ih.getUsername(),ih.getCrediti(),c);
+								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
 								home.show();
 							}
 						} catch (RemoteException | EccezioneUtente e1) {

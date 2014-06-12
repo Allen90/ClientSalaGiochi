@@ -20,6 +20,7 @@ import eccezioni.EccezioneUtente;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.rmi.RemoteException;
 
 public class RegisterGui extends JFrame {
@@ -79,12 +80,17 @@ public class RegisterGui extends JFrame {
 					if(comunicazione.getTipoCom()){
 						comunicazione.registraSocket(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
 						InfoHome ih = null;
-						ih = comunicazione.riceviRegistraSocket();
+						try {
+							ih = comunicazione.riceviRegistraSocket();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 							if(ih == null){
 								JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 							}
 							else{
-								home = new FramePrincipale(ih.getUsername(),ih.getCrediti(),comunicazione);
+								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
 								home.show();
 							}
 					}
@@ -97,7 +103,7 @@ public class RegisterGui extends JFrame {
 							else{
 								Comunicazione c = new Comunicazione(rmi);
 								InfoHome ih = c.getInfoHome();
-								home = new FramePrincipale(ih.getUsername(),ih.getCrediti(),c);
+								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
 								home.show();
 							}
 						} catch (RemoteException | EccezioneUtente e1) {

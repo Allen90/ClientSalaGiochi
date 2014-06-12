@@ -154,7 +154,7 @@ public class Comunicazione {
 	}
 	
 
-	public RmiTaskControl registrarmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
+	public RmiTaskControl registraRmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
 		return serverLog.registra(client, username,password,confPassword, nome, cognome);
 	}
 	

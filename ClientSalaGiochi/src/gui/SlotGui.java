@@ -20,6 +20,7 @@ import comunicazione.Comunicazione;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class SlotGui extends JFrame {
 
@@ -80,7 +81,13 @@ public class SlotGui extends JFrame {
 
 				if(comunicazione.getTipoCom()){
 					comunicazione.rollaSocket();
-					Rollata r = comunicazione.riceviRollaSocket();
+					Rollata r = null;
+					try {
+						r = comunicazione.riceviRollaSocket();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if(r.isValida() == false){
 						JOptionPane.showMessageDialog(null, "Crediti insufficenti!");
 					}
