@@ -165,11 +165,11 @@ public class Comunicazione {
 		return server.aggRubaMazzo();
 	}
 	
-	public ArrayList<Utente> aggClassGlobaleRmi() throws EccezioneClassificaVuota{
+	public ArrayList<EntryClassifica> aggClassGlobaleRmi() throws EccezioneClassificaVuota{
 		return server.aggClass();
 	}
 	
-	public ArrayList<Utente> aggClassGiornRmi() throws EccezioneClassificaVuota{
+	public ArrayList<EntryClassifica> aggClassGiornRmi() throws EccezioneClassificaVuota{
 		return server.aggClassGiorn();
 	}
 	
@@ -184,7 +184,11 @@ public class Comunicazione {
 	public Rollata rollaRmi(){
 		return server.rolla();
 	}
-
+	
+	public boolean riceviVintoTombola() throws IOException{
+		String s = reader.readLine();
+		return Decoder.clientResponseVintoTombola(s);
+	}
 	
 	
 	

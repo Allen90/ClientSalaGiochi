@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import comunicazione.Comunicazione;
 import slot.Slot;
+import userModel.EntryClassifica;
 import userModel.Utente;
 
 import java.awt.event.ActionListener;
@@ -34,8 +36,10 @@ public class FramePrincipale extends JFrame implements Runnable{
 	private Comunicazione comunicazione;
 	private SlotGui slot;
 	private boolean finito;
-	private ArrayList<Utente> classGlob;
-	private ArrayList<Utente> classGiorn;
+	private ArrayList<EntryClassifica> classGlob;
+	private ArrayList<EntryClassifica> classGiorn;
+	
+	//costruire oggetto entry list
 
 	/**
 	 * Create the frame.
@@ -145,8 +149,14 @@ public class FramePrincipale extends JFrame implements Runnable{
 			
 			if(comunicazione.getTipoCom()){
 				comunicazione.aggClassSocket();
-				classGlob = comunicazione.riceviClassificaGlobaleSocket();
-				classGiorn = comunicazione.riceviClassificaGiornalieraSocket();
+				try {
+					classGlob = comunicazione.riceviClassificaGlobaleSocket();
+					classGiorn = comunicazione.riceviClassificaGiornalieraSocket();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 			else{
 				try {

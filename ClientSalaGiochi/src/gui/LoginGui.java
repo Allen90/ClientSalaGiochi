@@ -86,7 +86,7 @@ public class LoginGui extends JFrame {
 							}
 							else{
 								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
-								home.show();
+								home.setVisible(true);
 							}
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
@@ -103,7 +103,7 @@ public class LoginGui extends JFrame {
 								Comunicazione c = new Comunicazione(rmi);
 								InfoHome ih = c.getInfoHome();
 								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
-								home.show();
+								home.setVisible(true);
 							}
 						} catch (RemoteException | EccezioneUtente e1) {
 							e1.printStackTrace();
