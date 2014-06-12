@@ -61,6 +61,10 @@ public class TombolaGui extends JFrame implements Runnable{
 	private JButton btnQuaterna2;
 	private JButton btnCinquina2;
 	private JButton btnTombola2;
+	private JPanel pnlTabellina1;
+	private JPanel pnlTabellina2;
+	private JPanel pnlTabellina3;
+	private JPanel pnlTabellina4;
 	private Comunicazione comunicazione;
 	private boolean response;
 	/**
@@ -85,13 +89,13 @@ public class TombolaGui extends JFrame implements Runnable{
 		}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 781, 733);
+		setBounds(100, 100, 781, 840);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel pnlTabellina1 = new JPanel();
+		pnlTabellina1 = new JPanel();
 		pnlTabellina1.setBounds(12, 0, 363, 143);
 		contentPane.add(pnlTabellina1);
 		pnlTabellina1.setLayout(new GridLayout(3, 9, 0, 0));
@@ -119,26 +123,90 @@ public class TombolaGui extends JFrame implements Runnable{
 		contentPane.add(btnAmbo1);
 
 		btnTerna1 = new JButton("Terna");
+		btnTerna1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),2,1,combo1.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnTerna1.setEnabled(false);
 		btnTerna1.setBounds(99, 155, 81, 25);
 		contentPane.add(btnTerna1);
 
 		btnQuaterna1 = new JButton("Quaterna");
+		btnQuaterna1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),3,1,combo1.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnQuaterna1.setEnabled(false);
 		btnQuaterna1.setBounds(192, 155, 117, 25);
 		contentPane.add(btnQuaterna1);
 
 		btnCinquina1 = new JButton("Cinquina");
+		btnCinquina1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),4,1,combo1.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnCinquina1.setEnabled(false);
 		btnCinquina1.setBounds(12, 192, 117, 25);
 		contentPane.add(btnCinquina1);
 
 		btnTombola1 = new JButton("Tombola");
+		btnTombola1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),5,1,combo1.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnTombola1.setEnabled(false);
 		btnTombola1.setBounds(141, 192, 117, 25);
 		contentPane.add(btnTombola1);
 
-		JPanel pnlTabellina3 = new JPanel();
+		pnlTabellina3 = new JPanel();
 		pnlTabellina3.setBounds(12, 224, 363, 143);
 		contentPane.add(pnlTabellina3);
 		pnlTabellina3.setLayout(new GridLayout(3, 9, 0, 0));
@@ -146,64 +214,224 @@ public class TombolaGui extends JFrame implements Runnable{
 
 
 		btnAmbo3 = new JButton("Ambo");
+		btnAmbo3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),1,3,combo3.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnAmbo3.setEnabled(false);
 		btnAmbo3.setBounds(12, 379, 75, 25);
 		contentPane.add(btnAmbo3);
 
 		btnTerna3 = new JButton("Terna");
+		btnTerna3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),2,3,combo3.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnTerna3.setEnabled(false);
 		btnTerna3.setBounds(99, 379, 81, 25);
 		contentPane.add(btnTerna3);
 
 		btnQuaterna3 = new JButton("Quaterna");
+		btnQuaterna3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),3,3,combo3.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnQuaterna3.setEnabled(false);
 		btnQuaterna3.setBounds(192, 379, 117, 25);
 		contentPane.add(btnQuaterna3);
 
 		btnCinquina3 = new JButton("Cinquina");
+		btnCinquina3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),3,4,combo3.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnCinquina3.setEnabled(false);
 		btnCinquina3.setBounds(12, 416, 117, 25);
 		contentPane.add(btnCinquina3);
 
 		btnTombola3 = new JButton("Tombola");
+		btnTombola3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),5,3,combo3.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnTombola3.setEnabled(false);
 		btnTombola3.setBounds(141, 416, 117, 25);
 		contentPane.add(btnTombola3);
 
-		JPanel pnlTabellina4 = new JPanel();
+		pnlTabellina4 = new JPanel();
 		pnlTabellina4.setBounds(12, 453, 363, 143);
 		contentPane.add(pnlTabellina4);
 		pnlTabellina4.setLayout(new GridLayout(3, 9, 0, 0));
 
 
 
-		
+
 		btnAmbo4 = new JButton("Ambo");
+		btnAmbo4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),1,4,combo4.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnAmbo4.setEnabled(false);
 		btnAmbo4.setBounds(12, 608, 75, 25);
 		contentPane.add(btnAmbo4);
 
 		btnTerna4 = new JButton("Terna");
+		btnTerna4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),2,4,combo4.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnTerna4.setEnabled(false);
 		btnTerna4.setBounds(99, 608, 81, 25);
 		contentPane.add(btnTerna4);
 
 		btnQuaterna4 = new JButton("Quaterna");
+		btnQuaterna4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),3,4,combo4.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnQuaterna4.setEnabled(false);
 		btnQuaterna4.setBounds(192, 608, 117, 25);
 		contentPane.add(btnQuaterna4);
 
 		btnCinquina4 = new JButton("Cinquina");
+		btnCinquina4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),4,1,combo4.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnCinquina4.setEnabled(false);
 		btnCinquina4.setBounds(12, 645, 117, 25);
 		contentPane.add(btnCinquina4);
 
 		btnTombola4 = new JButton("Tombola");
+		btnTombola4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),5,4,combo4.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnTombola4.setEnabled(false);
 		btnTombola4.setBounds(141, 645, 117, 25);
 		contentPane.add(btnTombola4);
 
-		JPanel pnlTabellina2 = new JPanel();
+		pnlTabellina2 = new JPanel();
 		pnlTabellina2.setBounds(393, 0, 363, 143);
 		contentPane.add(pnlTabellina2);
 		pnlTabellina2.setLayout(new GridLayout(3, 9, 0, 0));
@@ -211,26 +439,106 @@ public class TombolaGui extends JFrame implements Runnable{
 
 
 		btnAmbo2 = new JButton("Ambo");
+		btnAmbo2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),1,2,combo2.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnAmbo2.setEnabled(false);
 		btnAmbo2.setBounds(393, 155, 75, 25);
 		contentPane.add(btnAmbo2);
 
 		btnTerna2 = new JButton("Terna");
+		btnTerna2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),2,2,combo2.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnTerna2.setEnabled(false);
 		btnTerna2.setBounds(486, 155, 81, 25);
 		contentPane.add(btnTerna2);
 
 		btnQuaterna2 = new JButton("Quaterna");
+		btnQuaterna2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),3,2,combo2.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnQuaterna2.setEnabled(false);
 		btnQuaterna2.setBounds(579, 155, 117, 25);
 		contentPane.add(btnQuaterna2);
 
 		btnCinquina2 = new JButton("Cinquina");
+		btnCinquina2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),4,2,combo2.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnCinquina2.setEnabled(false);
 		btnCinquina2.setBounds(393, 192, 117, 25);
 		contentPane.add(btnCinquina2);
 
 		btnTombola2 = new JButton("Tombola");
+		btnTombola2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),5,2,combo2.getSelectedIndex()+1);
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.print("impossibile ricevere una risposta dal server");
+				}
+			}
+		});
 		btnTombola2.setEnabled(false);
 		btnTombola2.setBounds(522, 192, 117, 25);
 		contentPane.add(btnTombola2);
@@ -295,6 +603,46 @@ public class TombolaGui extends JFrame implements Runnable{
 		combo2.setBounds(692, 193, 53, 24);
 		contentPane.add(combo2);
 
+		JLabel lblAmbo = new JLabel("Ambo:");
+		lblAmbo.setBounds(12, 684, 70, 15);
+		contentPane.add(lblAmbo);
+
+		JLabel lblPremioAmbo = new JLabel("New label");
+		lblPremioAmbo.setBounds(66, 684, 70, 15);
+		contentPane.add(lblPremioAmbo);
+
+		JLabel lblTerna = new JLabel("Terna:");
+		lblTerna.setBounds(151, 684, 70, 15);
+		contentPane.add(lblTerna);
+
+		JLabel lblPremioTerna = new JLabel("New label");
+		lblPremioTerna.setBounds(205, 684, 70, 15);
+		contentPane.add(lblPremioTerna);
+
+		JLabel lblQuaterna = new JLabel("Quaterna:");
+		lblQuaterna.setBounds(288, 684, 93, 15);
+		contentPane.add(lblQuaterna);
+
+		JLabel lblPremioQuaterna = new JLabel("New label");
+		lblPremioQuaterna.setBounds(372, 684, 70, 15);
+		contentPane.add(lblPremioQuaterna);
+
+		JLabel lblCinquina = new JLabel("Cinquina:");
+		lblCinquina.setBounds(454, 684, 70, 15);
+		contentPane.add(lblCinquina);
+
+		JLabel lblPremioCinquina = new JLabel("New label");
+		lblPremioCinquina.setBounds(532, 684, 70, 15);
+		contentPane.add(lblPremioCinquina);
+
+		JLabel lblTombola = new JLabel("Tombola:");
+		lblTombola.setBounds(614, 684, 70, 15);
+		contentPane.add(lblTombola);
+
+		JLabel lblPremioTombola = new JLabel("New label");
+		lblPremioTombola.setBounds(686, 684, 70, 15);
+		contentPane.add(lblPremioTombola);
+
 		for(int i = 0;i< 27; i++){
 			pnlTabellina1.add(tabellina1.get(i));
 			pnlTabellina2.add(tabellina2.get(i));
@@ -313,30 +661,30 @@ public class TombolaGui extends JFrame implements Runnable{
 			btnAmbo1.setEnabled(true);
 		else 
 			btnAmbo1.setEnabled(false);
-		
+
 		if(vincente[n] == 3 && situazione.getPremiDisponibili()[1] == true)
 			btnTerna1.setEnabled(true);
 		else 
 			btnTerna1.setEnabled(false);
-		
+
 		if(vincente[n] == 4 && situazione.getPremiDisponibili()[2] == true)
 			btnQuaterna1.setEnabled(true);
 		else 
 			btnQuaterna1.setEnabled(false);
-		
+
 		if(vincente[n] == 5 && situazione.getPremiDisponibili()[3] == true)
 			btnCinquina1.setEnabled(true);
 		else 
 			btnCinquina1.setEnabled(false);
 		int tomb = 0;
 		for(int i = 0;i< vincente.length;i++)
-			 if(vincente[i] == 5)
-				 tomb ++;
+			if(vincente[i] == 5)
+				tomb ++;
 		if(tomb == 3)
 			btnTombola1.setEnabled(true);
 		else 
 			btnTombola1.setEnabled(false);
-		
+
 	}
 
 	public void aggiorna2(int n){
@@ -345,25 +693,25 @@ public class TombolaGui extends JFrame implements Runnable{
 			btnAmbo2.setEnabled(true);
 		else 
 			btnAmbo2.setEnabled(false);
-		
+
 		if(vincente[n] == 3 && situazione.getPremiDisponibili()[1] == true)
 			btnTerna2.setEnabled(true);
 		else 
 			btnTerna2.setEnabled(false);
-		
+
 		if(vincente[n] == 4 && situazione.getPremiDisponibili()[2] == true)
 			btnQuaterna2.setEnabled(true);
 		else 
 			btnQuaterna2.setEnabled(false);
-		
+
 		if(vincente[n] == 5 && situazione.getPremiDisponibili()[3] == true)
 			btnCinquina2.setEnabled(true);
 		else 
 			btnCinquina2.setEnabled(false);
 		int tomb = 0;
 		for(int i = 0;i< vincente.length;i++)
-			 if(vincente[i] == 5)
-				 tomb ++;
+			if(vincente[i] == 5)
+				tomb ++;
 		if(tomb == 3)
 			btnTombola2.setEnabled(true);
 		else 
@@ -376,25 +724,25 @@ public class TombolaGui extends JFrame implements Runnable{
 			btnAmbo3.setEnabled(true);
 		else 
 			btnAmbo3.setEnabled(false);
-		
+
 		if(vincente[n] == 3 && situazione.getPremiDisponibili()[1] == true)
 			btnTerna3.setEnabled(true);
 		else 
 			btnTerna3.setEnabled(false);
-		
+
 		if(vincente[n] == 4 && situazione.getPremiDisponibili()[2] == true)
 			btnQuaterna3.setEnabled(true);
 		else 
 			btnQuaterna3.setEnabled(false);
-		
+
 		if(vincente[n] == 5 && situazione.getPremiDisponibili()[3] == true)
 			btnCinquina3.setEnabled(true);
 		else 
 			btnCinquina3.setEnabled(false);
 		int tomb = 0;
 		for(int i = 0;i< vincente.length;i++)
-			 if(vincente[i] == 5)
-				 tomb ++;
+			if(vincente[i] == 5)
+				tomb ++;
 		if(tomb == 3)
 			btnTombola3.setEnabled(true);
 		else 
@@ -408,33 +756,33 @@ public class TombolaGui extends JFrame implements Runnable{
 			btnAmbo4.setEnabled(true);
 		else 
 			btnAmbo4.setEnabled(false);
-		
+
 		if(vincente[n] == 3 && situazione.getPremiDisponibili()[1] == true)
 			btnTerna4.setEnabled(true);
 		else 
 			btnTerna4.setEnabled(false);
-		
+
 		if(vincente[n] == 4 && situazione.getPremiDisponibili()[2] == true)
 			btnQuaterna4.setEnabled(true);
 		else 
 			btnQuaterna4.setEnabled(false);
-		
+
 		if(vincente[n] == 5 && situazione.getPremiDisponibili()[3] == true)
 			btnCinquina4.setEnabled(true);
 		else 
 			btnCinquina4.setEnabled(false);
 		int tomb = 0;
 		for(int i = 0;i< vincente.length;i++)
-			 if(vincente[i] == 5)
-				 tomb ++;
+			if(vincente[i] == 5)
+				tomb ++;
 		if(tomb == 3)
 			btnTombola4.setEnabled(true);
 		else 
 			btnTombola4.setEnabled(false);
 
 	}
-	
-	
+
+
 	public boolean inviaVittoria(int numParita,int tipoVittoria,int indiceCartella, int indiceRiga) throws IOException{
 		boolean response = false;
 		if(comunicazione.getTipoCom()){
@@ -446,18 +794,20 @@ public class TombolaGui extends JFrame implements Runnable{
 		}
 		return response;
 	}
-	
-	
+
+	public void aggiornaCartella(ArrayList<JLabel> tabellina, int indice){
+		for(int i = 0;i<3;i++)
+			for(int j=0;j<9;j++)
+				tabellina.set(i*j, new JLabel(""+situazione.getTabella(indice).getNumero(i, j)));		
+	}
+
 	public void run(){
 		try {
 			Thread.sleep(2000);
 			if(comunicazione.getTipoCom()){
 				comunicazione.aggTombolaSocket();
 				situazione = comunicazione.riceviAggTombolaSocket();
-				aggiorna1(combo1.getSelectedIndex());
-				aggiorna2(combo2.getSelectedIndex());
-				aggiorna3(combo3.getSelectedIndex());
-				aggiorna4(combo4.getSelectedIndex());
+
 			}
 			else {
 				situazione = comunicazione.aggTombolarmi();
@@ -470,12 +820,26 @@ public class TombolaGui extends JFrame implements Runnable{
 			// TODO Auto-generated catch block
 			System.out.println("impossibile ricevere dal server l'aggiornamento tombola");
 		}
-		
-	}
-	
-	
-	
+		aggiorna1(combo1.getSelectedIndex());
+		aggiorna2(combo2.getSelectedIndex());
+		aggiorna3(combo3.getSelectedIndex());
+		aggiorna4(combo4.getSelectedIndex());
+		aggiornaCartella(tabellina1,0);
+		aggiornaCartella(tabellina2,1);
+		aggiornaCartella(tabellina3,2);
+		aggiornaCartella(tabellina4,3);
+		pnlTabellina1.removeAll();
+		pnlTabellina2.removeAll();
+		pnlTabellina3.removeAll();
+		pnlTabellina4.removeAll();
+		for(int i = 0; i<27; i++){
+			pnlTabellina1.add(tabellina1.get(i));
+			pnlTabellina2.add(tabellina2.get(i));
+			pnlTabellina3.add(tabellina3.get(i));
+			pnlTabellina4.add(tabellina4.get(i));
+		}
 
+	}
 }
 
 
