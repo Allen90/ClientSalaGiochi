@@ -15,6 +15,7 @@ import rubamazzo.Mossa;
 import rubamazzo.SituazioneRubamazzo;
 import slot.Rollata;
 import tombola.SituazioneTombola;
+import userModel.EntryClassifica;
 import userModel.InfoHome;
 import userModel.Utente;
 import eccezioni.EccezioneClassificaVuota;
@@ -84,7 +85,7 @@ public class Comunicazione {
 	}
 	
 	public void mossaRubamazzoSocket(Mossa m, int numPartita){
-		writer.print(Encoder.clientMossaRubamazzo(m));
+		writer.print(Encoder.clientMossaRubamazzo(m,numPartita));
 	}
 	
 	public void vintoTombolaSocket(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga){
@@ -125,16 +126,14 @@ public class Comunicazione {
 		return ih;
 	}
 	
-	public ArrayList<String> riceviClassificaGlobaleSocket() throws IOException{
+	public ArrayList<EntryClassifica> riceviClassificaGlobaleSocket() throws IOException{
 		String s = reader.readLine();
-		ArrayList<String> c = Decoder.clientClassificaGlobale(s);
-		return c;
+		return Decoder.clientClassificaGlobale(s);
 	}
 	
-	public ArrayList<String> riceviClassificaGiornalieraSocket() throws IOException{
+	public ArrayList<EntryClassifica> riceviClassificaGiornalieraSocket() throws IOException{
 		String s = reader.readLine();
-		ArrayList<String> c = Decoder.clientClassificaGiornaliera(s);
-		return c;
+		return Decoder.clientClassificaGiornaliera(s);
 	}
 	
 	public InfoHome getInfoHome() throws EccezioneUtente{
