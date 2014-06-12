@@ -22,7 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.rmi.RemoteException;
 
-public class RegisterFrame extends JFrame {
+public class RegisterGui extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textNome;
@@ -38,7 +38,7 @@ public class RegisterFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegisterFrame(final Comunicazione comunicazione) {
+	public RegisterGui(final Comunicazione comunicazione) {
 		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

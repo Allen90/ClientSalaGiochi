@@ -32,7 +32,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 	private JPanel contentPane;
 	private Utente utente;
 	private Comunicazione comunicazione;
-	private SlotFrame slot;
+	private SlotGui slot;
 	private boolean finito;
 	private ArrayList<Utente> classGlob;
 	private ArrayList<Utente> classGiorn;
@@ -77,7 +77,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 		btnSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				slot = new SlotFrame(comunicazione);
+				slot = new SlotGui(comunicazione);
 							
 
 			}

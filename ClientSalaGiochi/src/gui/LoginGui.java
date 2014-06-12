@@ -23,7 +23,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
-public class LoginFrame extends JFrame {
+public class LoginGui extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textUsername;
@@ -36,7 +36,7 @@ public class LoginFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LoginFrame(final Comunicazione comunicazione) {
+	public LoginGui(final Comunicazione comunicazione) {
 		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

@@ -21,7 +21,7 @@ import comunicazione.Comunicazione;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class SlotFrame extends JFrame {
+public class SlotGui extends JFrame {
 
 	private JPanel contentPane;
 	private Comunicazione comunicazione;
@@ -38,7 +38,7 @@ public class SlotFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public SlotFrame(final Comunicazione comunicazione) {
+	public SlotGui(final Comunicazione comunicazione) {
 		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

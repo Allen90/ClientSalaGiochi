@@ -23,8 +23,8 @@ public class ClientStartGUI {
 	private static final String host = "127.0.0.1";
 	private Socket socket;
 	private Comunicazione comunicazione;
-	private LoginFrame login;
-	private RegisterFrame register;
+	private LoginGui login;
+	private RegisterGui register;
 	/**
 	 * Launch the application.
 	 */
@@ -83,7 +83,7 @@ public class ClientStartGUI {
 					try {
 						socket = new Socket(host , port);
 						comunicazione = new Comunicazione(socket);
-						register = new RegisterFrame(comunicazione);
+						register = new RegisterGui(comunicazione);
 					}
 					catch(Exception e1){
 						
@@ -109,7 +109,7 @@ public class ClientStartGUI {
 					try {
 						socket = new Socket(host , port);
 						comunicazione = new Comunicazione(socket);
-						login = new LoginFrame(comunicazione);
+						login = new LoginGui(comunicazione);
 					}
 					catch(Exception e1){
 						
