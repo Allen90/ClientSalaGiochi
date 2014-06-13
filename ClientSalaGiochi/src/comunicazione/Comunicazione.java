@@ -38,6 +38,7 @@ public class Comunicazione {
 		
 		reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		writer = new PrintWriter(client.getOutputStream(), true);
+		writer.flush();
 		System.out.println("creo reader e writer");
 	}
 	
@@ -66,7 +67,7 @@ public class Comunicazione {
 	
 	public void loginSocket(String username,String password){
 		System.out.println("Stringa da inviare"+Encoder.clientLogin(username, password));
-		writer.print(Encoder.clientLogin(username, password));
+		writer.println(Encoder.clientLogin(username, password));
 		System.out.println("stringa inviata");
 	}
 	

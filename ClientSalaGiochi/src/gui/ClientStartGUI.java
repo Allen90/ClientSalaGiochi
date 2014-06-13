@@ -140,6 +140,7 @@ public class ClientStartGUI {
 				else{
 					try {
 						socket = new Socket(host , port);
+						System.out.println("socket creato:" + socket);
 						comunicazione = new Comunicazione(socket);
 						login = new LoginGui(comunicazione);
 						login.setVisible(true);

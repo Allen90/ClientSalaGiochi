@@ -78,6 +78,7 @@ public class RegisterGui extends JFrame {
 
 				else{
 					if(comunicazione.getTipoCom()){
+						System.out.println("qui in socket");
 						comunicazione.registraSocket(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
 						InfoHome ih = null;
 						try {
@@ -91,10 +92,11 @@ public class RegisterGui extends JFrame {
 							}
 							else{
 								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
-								home.show();
+								home.setVisible(true);
 							}
 					}
 					else{
+						System.out.println("qui in rmi");
 						try {
 							rmi = comunicazione.registraRmi(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
 							if(rmi == null){
@@ -104,7 +106,7 @@ public class RegisterGui extends JFrame {
 								Comunicazione c = new Comunicazione(rmi);
 								InfoHome ih = c.getInfoHome();
 								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
-								home.show();
+								home.setVisible(true);
 							}
 						} catch (RemoteException | EccezioneUtente e1) {
 							// TODO Auto-generated catch block
