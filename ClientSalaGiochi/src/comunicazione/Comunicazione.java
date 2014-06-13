@@ -58,11 +58,11 @@ public class Comunicazione {
 	
 	
 	public void giocoTombolaSocket(int numCartelle){
-		writer.print(Encoder.clientGiocoTombola(numCartelle));
+		writer.println(Encoder.clientGiocoTombola(numCartelle));
 	}
 	
 	public void giocoRubamazzoSocket(){
-		writer.print(Encoder.clientGiocoRumbamazzo);
+		writer.println(Encoder.clientGiocoRumbamazzo);
 	}
 	
 	public void loginSocket(String username,String password){
@@ -72,31 +72,31 @@ public class Comunicazione {
 	}
 	
 	public void registraSocket(String username, String password, String confPassword, String nome, String cognome){
-		writer.print(Encoder.clientRegistra(username, password, confPassword, nome, cognome));
+		writer.println(Encoder.clientRegistra(username, password, confPassword, nome, cognome));
 	}
 	
 	public void aggTombolaSocket(){
-		writer.print(Encoder.clientAggiornaTombola);
+		writer.println(Encoder.clientAggiornaTombola);
 	}
 	
 	public void aggRubamazzoSocket(){
-		writer.print(Encoder.clientAggiornaRubamazzo);
+		writer.println(Encoder.clientAggiornaRubamazzo);
 	}
 	
 	public void aggClassSocket(){
-		writer.print(Encoder.clientAggiornaClassifica);
+		writer.println(Encoder.clientAggiornaClassifica);
 	}
 	
 	public void mossaRubamazzoSocket(Mossa m, int numPartita){
-		writer.print(Encoder.clientMossaRubamazzo(m,numPartita));
+		writer.println(Encoder.clientMossaRubamazzo(m,numPartita));
 	}
 	
 	public void vintoTombolaSocket(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga){
-		writer.print(Encoder.clientVintoTombola(numPartita,tipoVittoria,indiceCartella,indiceRiga));
+		writer.println(Encoder.clientVintoTombola(numPartita,tipoVittoria,indiceCartella,indiceRiga));
 	}
 	
 	public void rollaSocket(){
-		writer.print(Encoder.clientRolla);
+		writer.println(Encoder.clientRolla);
 	}
 	
 	public SituazioneTombola riceviAggTombolaSocket() throws IOException{
