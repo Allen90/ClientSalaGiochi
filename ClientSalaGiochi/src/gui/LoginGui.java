@@ -36,7 +36,58 @@ public class LoginGui extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LoginGui(final Comunicazione comunicazione) {
+	
+	public void invioLogin(){
+		if(textUsername.getText() == "" && textPassword.getText() == ""){
+			JOptionPane.showMessageDialog(null, "riempi i campi username e password");
+		}
+
+		else{
+			if(comunicazione.getTipoCom()){
+				System.out.println(""+comunicazione.getTipoCom());
+				System.out.println("qui prima di richiesta login");
+				comunicazione.loginSocket(textUsername.getText(),textPassword.getText());
+				System.out.println("qui dopo richiesta login");
+				Utente utente = null;
+				InfoHome ih = null;
+				try {
+					System.out.println("qui prima di risposta server");
+					ih = comunicazione.riceviLoginSocket();
+					System.out.println("qui dopo risposta server");
+					if(ih == null){
+						JOptionPane.showMessageDialog(null, "Login errato");
+					}
+					else{
+						home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
+						home.setVisible(true);
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			else{
+				try {
+					rmi = comunicazione.loginRmi(textUsername.getText(), textPassword.getText());
+					if(rmi == null){
+						JOptionPane.showMessageDialog(null, "Login errato");
+					}
+					else{
+						Comunicazione c = new Comunicazione(rmi);
+						InfoHome ih = c.getInfoHome();
+						home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
+						home.setVisible(true);
+					}
+				} catch (RemoteException | EccezioneUtente e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		}
+	}
+	
+	
+	public LoginGui(Comunicazione comunicazione) {
 		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -70,47 +121,8 @@ public class LoginGui extends JFrame {
 		btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(textUsername.getText() == "" && textPassword.getText() == ""){
-					// dialog
-				}
-
-				else{
-					if(comunicazione.getTipoCom()){
-						comunicazione.loginSocket(textUsername.getText(),textPassword.getText());
-						Utente utente = null;
-						InfoHome ih = null;
-						try {
-							ih = comunicazione.riceviLoginSocket();
-							if(ih == null){
-								JOptionPane.showMessageDialog(null, "Login errato");
-							}
-							else{
-								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
-								home.setVisible(true);
-							}
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-					else{
-						try {
-							rmi = comunicazione.loginRmi(textUsername.getText(), textPassword.getText());
-							if(rmi == null){
-								JOptionPane.showMessageDialog(null, "Login errato");
-							}
-							else{
-								Comunicazione c = new Comunicazione(rmi);
-								InfoHome ih = c.getInfoHome();
-								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
-								home.setVisible(true);
-							}
-						} catch (RemoteException | EccezioneUtente e1) {
-							e1.printStackTrace();
-						}
-						
-					}
-				}
+				
+				invioLogin();
 
 			}
 		});

@@ -29,15 +29,16 @@ public class Comunicazione {
 	private boolean tipoCom;
 	private RmiTaskControl server;
 	private RmiServer serverLog;
-	private ClientRmi client;
 	private PrintWriter writer = null;
 	// modficare login, registrazione rmi
 	
 	
 	public Comunicazione(Socket client) throws IOException{
-		this.tipoCom = true;
+		tipoCom = true;
+		
 		reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		writer = new PrintWriter(client.getOutputStream(), true);
+		System.out.println("creo reader e writer");
 	}
 	
 	public Comunicazione(RmiTaskControl server){
@@ -45,9 +46,8 @@ public class Comunicazione {
 		tipoCom = false;
 	}
 	
-	public Comunicazione(RmiServer serverLog, ClientRmi c){
+	public Comunicazione(RmiServer serverLog){
 		this.serverLog  = serverLog;
-		this.client = client;
 	}
 	
 	public boolean getTipoCom(){
@@ -65,7 +65,9 @@ public class Comunicazione {
 	}
 	
 	public void loginSocket(String username,String password){
+		System.out.println("Stringa da inviare"+Encoder.clientLogin(username, password));
 		writer.print(Encoder.clientLogin(username, password));
+		System.out.println("stringa inviata");
 	}
 	
 	public void registraSocket(String username, String password, String confPassword, String nome, String cognome){
@@ -115,6 +117,7 @@ public class Comunicazione {
 	}
 	
 	public InfoHome riceviLoginSocket() throws IOException{
+		System.out.println("qui prima di leggere stringa");
 		String s = reader.readLine();
 		InfoHome ih = Decoder.clientAccesso(s);
 		return ih;
@@ -149,12 +152,12 @@ public class Comunicazione {
 	}
 	
 	public RmiTaskControl loginRmi(String username,String password) throws RemoteException, EccezioneUtente{
-		return serverLog.login(client, username, password);
+		return serverLog.login(username, password);
 	}
 	
 
 	public RmiTaskControl registraRmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
-		return serverLog.registra(client, username,password,confPassword, nome, cognome);
+		return serverLog.registra(username,password,confPassword, nome, cognome);
 	}
 	
 	public SituazioneTombola aggTombolarmi(){

@@ -52,18 +52,18 @@ public class SlotGui extends JFrame {
 		lblBenvenutiNellaSlot.setBounds(12, 12, 226, 15);
 		contentPane.add(lblBenvenutiNellaSlot);
 
-		lblSimb1 = new JLabel("New label");
-		lblSimb1.setIcon(dollaro);
+		lblSimb1 = new JLabel("");
+		lblSimb1.setIcon(new ImageIcon(SlotGui.class.getResource("/immaginiSlot/dollaro.jpg")));
 		lblSimb1.setBounds(12, 61, 115, 102);
 		contentPane.add(lblSimb1);
 
-		lblSimb2 = new JLabel("New label");
-		lblSimb2.setIcon(dollaro);
+		lblSimb2 = new JLabel("");
+		lblSimb2.setIcon(new ImageIcon(SlotGui.class.getResource("/immaginiSlot/dollaro.jpg")));
 		lblSimb2.setBounds(151, 61, 115, 102);
 		contentPane.add(lblSimb2);
 
-		lblSimb3 = new JLabel("New label");
-		lblSimb3.setIcon(dollaro);
+		lblSimb3 = new JLabel("");
+		lblSimb3.setIcon(new ImageIcon(SlotGui.class.getResource("/immaginiSlot/dollaro.jpg")));
 		lblSimb3.setBounds(302, 61, 115, 102);
 		contentPane.add(lblSimb3);
 
