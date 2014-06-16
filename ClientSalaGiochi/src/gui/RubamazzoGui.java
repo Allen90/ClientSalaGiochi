@@ -1,6 +1,6 @@
 package gui;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,51 +10,44 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
 import javax.swing.JTextPane;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.border.MatteBorder;
-import javax.swing.UIManager;
+
+import comunicazione.Comunicazione;
+
+
+import rubamazzo.SituazioneRubamazzo;
 
 public class RubamazzoGui extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	/**
-	 * @wbp.nonvisual location=182,709
-	 */
+	
+	
+	private Comunicazione comunicazione;
+	private boolean response;
+	private SituazioneRubamazzo situazione;
+	
+	private JTextPane textPaneLog;
+	
+	private ArrayList<JLabel> labelMano;
+	private ArrayList<JLabel> labelBanco;
+	private ArrayList<JLabel> labelBottini;
+	private JLabel labelBottino;
+	
 	private final ButtonGroup bgMano = new ButtonGroup();
-	/**
-	 * @wbp.nonvisual location=182,249
-	 */
 	private final ButtonGroup bgBottini = new ButtonGroup();
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RubamazzoGui frame = new RubamazzoGui();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public RubamazzoGui() {
+	private ArrayList<JCheckBox> checkBanco;
+	
+	public RubamazzoGui(Comunicazione comunicazione, SituazioneRubamazzo situazione) {
+		this.comunicazione = comunicazione;
+		this.situazione = situazione;
 		setResizable(false);
 		setTitle("Rubamazzo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,45 +60,70 @@ public class RubamazzoGui extends JFrame {
 		JPanel panelCarteAvversari = new JPanel();
 		panelCarteAvversari.setBounds(200, 0, 500, 200);
 		contentPane.add(panelCarteAvversari);
+		panelCarteAvversari.setLayout(new GridLayout(1, 3, 0, 0));
+		
+		for(int i = 0; i < situazione.getBottini().size(); i++){
+			labelBottini.add(new JLabel(situazione.getBottini().get(i).toString()));
+			bgMano.add(new JRadioButton(""));
+			
+		}
+		
+		for(int i = 0; i < situazione.getBanco().size(); i++){
+			labelBanco.add(new JLabel(situazione.getBanco().get(i).toString()));
+			
+		}
+		
+		for(int i = 0; i< situazione.getMano().size(); i++){
+			labelMano.add(new JLabel(situazione.getMano().get(i).toString()));
+			
+		}
+		
+		JLabel labelBottini0 = new JLabel("New label");
+		labelBottini0.setHorizontalAlignment(SwingConstants.CENTER);
+		panelCarteAvversari.add(labelBottini0);
 		
 		JPanel panelRadioAvversari = new JPanel();
 		panelRadioAvversari.setBounds(200, 200, 500, 30);
 		contentPane.add(panelRadioAvversari);
 		panelRadioAvversari.setLayout(new GridLayout(1, 3, 0, 0));
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("New radio button");
-		rdbtnNewRadioButton_1.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioAvversari.add(rdbtnNewRadioButton_1);
+		JRadioButton radioBottini0 = new JRadioButton("New radio button");
+		radioBottini0.setHorizontalAlignment(SwingConstants.CENTER);
+		panelRadioAvversari.add(radioBottini0);
 		
-		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("New radio button");
-		rdbtnNewRadioButton_2.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioAvversari.add(rdbtnNewRadioButton_2);
+		JRadioButton radioBottini1 = new JRadioButton("New radio button");
+		radioBottini1.setHorizontalAlignment(SwingConstants.CENTER);
+		panelRadioAvversari.add(radioBottini1);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
-		rdbtnNewRadioButton.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioAvversari.add(rdbtnNewRadioButton);
+		JRadioButton radioBottini2 = new JRadioButton("New radio button");
+		radioBottini2.setHorizontalAlignment(SwingConstants.CENTER);
+		panelRadioAvversari.add(radioBottini2);
 		
 		JPanel panelCarteBanco = new JPanel();
 		panelCarteBanco.setBounds(0, 230, 994, 200);
 		contentPane.add(panelCarteBanco);
 		panelCarteBanco.setLayout(new GridLayout(1, 10, 0, 0));
 		
+		JLabel labelBanco0 = new JLabel("New label");
+		labelBanco0.setHorizontalAlignment(SwingConstants.CENTER);
+		panelCarteBanco.add(labelBanco0);
+		
 		JPanel panelRadioBanco = new JPanel();
 		panelRadioBanco.setBounds(0, 430, 994, 30);
 		contentPane.add(panelRadioBanco);
 		panelRadioBanco.setLayout(new GridLayout(1, 3, 0, 0));
 		
-		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("New check box");
-		chckbxNewCheckBox_1.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioBanco.add(chckbxNewCheckBox_1);
+		JCheckBox checkBanco0 = new JCheckBox("New check box");
+		checkBanco0.setHorizontalAlignment(SwingConstants.CENTER);
+		panelRadioBanco.add(checkBanco0);
 		
-		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("New check box");
-		chckbxNewCheckBox_2.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioBanco.add(chckbxNewCheckBox_2);
+		JCheckBox checkBanco1 = new JCheckBox("New check box");
+		checkBanco1.setHorizontalAlignment(SwingConstants.CENTER);
+		panelRadioBanco.add(checkBanco1);
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("New check box");
-		chckbxNewCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioBanco.add(chckbxNewCheckBox);
+		JCheckBox checkBanco2 = new JCheckBox("New check box");
+		checkBanco2.setHorizontalAlignment(SwingConstants.CENTER);
+		panelRadioBanco.add(checkBanco2);
 		
 		JPanel panelCarteMano = new JPanel();
 		panelCarteMano.setBounds(200, 460, 500, 209);
@@ -134,25 +152,29 @@ public class RubamazzoGui extends JFrame {
 		contentPane.add(panelBottino);
 		panelBottino.setLayout(new GridLayout(1, 1, 0, 0));
 		
-		JLabel lblNewLabel = new JLabel("Bottino");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panelBottino.add(lblNewLabel);
+		JLabel labelBottino = new JLabel("Bottino");
+		labelBottino.setHorizontalAlignment(SwingConstants.CENTER);
+		panelBottino.add(labelBottino);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(700, 460, 294, 240);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		JPanel panelGiocaCarta = new JPanel();
+		panelGiocaCarta.setBounds(700, 460, 294, 240);
+		contentPane.add(panelGiocaCarta);
+		panelGiocaCarta.setLayout(null);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(92, 65, 100, 100);
-		panel.add(btnNewButton);
+		JButton buttonGiocaCarta = new JButton("Gioca carta");
+		buttonGiocaCarta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		buttonGiocaCarta.setBounds(100, 60, 100, 100);
+		panelGiocaCarta.add(buttonGiocaCarta);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(700, 0, 294, 230);
-		contentPane.add(panel_1);
-		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
+		JPanel panelLog = new JPanel();
+		panelLog.setBounds(700, 0, 294, 230);
+		contentPane.add(panelLog);
+		panelLog.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JTextPane textPane = new JTextPane();
-		panel_1.add(textPane);
+		JTextPane textPaneLog = new JTextPane();
+		panelLog.add(textPaneLog);
 	}
 }
