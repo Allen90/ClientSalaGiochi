@@ -88,6 +88,7 @@ public class RegisterGui extends JFrame {
 							e1.printStackTrace();
 						}
 							if(ih == null){
+								System.out.println("qui in ih = null");
 								JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 							}
 							else{

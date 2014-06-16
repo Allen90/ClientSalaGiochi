@@ -23,6 +23,8 @@ import comunicazione.Comunicazione;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import eccezioni.EccezioneUtente;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
@@ -154,7 +156,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -175,7 +177,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -196,7 +198,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -224,7 +226,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -245,7 +247,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -266,7 +268,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -287,7 +289,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -308,7 +310,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -337,7 +339,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -358,7 +360,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -379,7 +381,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -400,7 +402,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -421,7 +423,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -449,7 +451,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -470,7 +472,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -491,7 +493,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -512,7 +514,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -533,7 +535,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
+				} catch (IOException | EccezioneUtente e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
 				}
@@ -783,7 +785,7 @@ public class TombolaGui extends JFrame implements Runnable{
 	}
 
 
-	public boolean inviaVittoria(int numParita,int tipoVittoria,int indiceCartella, int indiceRiga) throws IOException{
+	public boolean inviaVittoria(int numParita,int tipoVittoria,int indiceCartella, int indiceRiga) throws IOException, EccezioneUtente{
 		boolean response = false;
 		if(comunicazione.getTipoCom()){
 			comunicazione.vintoTombolaSocket(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);

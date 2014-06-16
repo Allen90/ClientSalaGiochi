@@ -181,7 +181,7 @@ public class Comunicazione {
 		return server.mossaRubamazzo(m, numPartita);
 	}
 	
-	public boolean vintoTombolaRmi(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga){
+	public boolean vintoTombolaRmi(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga) throws EccezioneUtente{
 		return server.vintoTombola(numPartita, tipoVittoria, indiceCartella, indiceRiga);
 	}
 	
