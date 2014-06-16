@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.text.ParseException;
 
 public class RegisterGui extends JFrame {
 
@@ -84,6 +85,9 @@ public class RegisterGui extends JFrame {
 						try {
 							ih = comunicazione.riceviRegistraSocket();
 						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (ParseException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}

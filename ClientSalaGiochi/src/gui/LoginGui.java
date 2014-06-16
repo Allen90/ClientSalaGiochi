@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.text.ParseException;
 
 public class LoginGui extends JFrame {
 
@@ -35,9 +36,10 @@ public class LoginGui extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws ParseException 
 	 */
 	
-	public void invioLogin(){
+	public void invioLogin() throws ParseException{
 		if(textUsername.getText() == "" && textPassword.getText() == ""){
 			JOptionPane.showMessageDialog(null, "riempi i campi username e password");
 		}
@@ -122,7 +124,12 @@ public class LoginGui extends JFrame {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				invioLogin();
+				try {
+					invioLogin();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 			}
 		});

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import rmiClient.ClientRmi;
@@ -117,14 +118,14 @@ public class Comunicazione {
 		return r;
 	}
 	
-	public InfoHome riceviLoginSocket() throws IOException{
+	public InfoHome riceviLoginSocket() throws IOException, ParseException{
 		System.out.println("qui prima di leggere stringa");
 		String s = reader.readLine();
 		InfoHome ih = Decoder.clientAccesso(s);
 		return ih;
 	}
 	
-	public InfoHome riceviRegistraSocket() throws IOException{
+	public InfoHome riceviRegistraSocket() throws IOException, ParseException{
 		String s = reader.readLine();
 		InfoHome ih = Decoder.clientAccesso(s);
 		return ih;

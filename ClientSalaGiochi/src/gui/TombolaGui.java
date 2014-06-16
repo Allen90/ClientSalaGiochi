@@ -117,6 +117,9 @@ public class TombolaGui extends JFrame implements Runnable{
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
+				} catch (EccezioneUtente e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -138,6 +141,9 @@ public class TombolaGui extends JFrame implements Runnable{
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					System.out.print("impossibile ricevere una risposta dal server");
+				} catch (EccezioneUtente e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -546,7 +552,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		contentPane.add(btnTombola2);
 
 		JPanel pnlTabellone = new JPanel();
-		pnlTabellone.setBounds(396, 244, 383, 426);
+		pnlTabellone.setBounds(396, 243, 371, 427);
 		contentPane.add(pnlTabellone);
 		pnlTabellone.setLayout(new GridLayout(10, 9, 0, 0));
 
