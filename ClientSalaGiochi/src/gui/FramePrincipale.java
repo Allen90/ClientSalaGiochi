@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.IOException;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -162,7 +163,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 				try {
 					classGiorn = comunicazione.aggClassGlobaleRmi();
 					classGlob = comunicazione.aggClassGiornRmi();
-				} catch (EccezioneClassificaVuota e) {
+				} catch (EccezioneClassificaVuota | RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

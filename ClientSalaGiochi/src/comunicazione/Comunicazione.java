@@ -141,15 +141,15 @@ public class Comunicazione {
 		return Decoder.clientClassificaGiornaliera(s);
 	}
 	
-	public InfoHome getInfoHome() throws EccezioneUtente{
+	public InfoHome getInfoHome() throws EccezioneUtente, RemoteException{
 		return server.getInfoHome();
 	}
 	
-	public boolean giocoTombolaRmi(int numCartelle) throws EccezioneUtente{
+	public boolean giocoTombolaRmi(int numCartelle) throws EccezioneUtente, RemoteException{
 		return server.giocoTombola(numCartelle);
 	}
 	
-	public boolean giocoRubamazzoRmi() throws EccezioneUtente{
+	public boolean giocoRubamazzoRmi() throws EccezioneUtente, RemoteException{
 		return server.giocoRubamazzo();
 	}
 	
@@ -162,31 +162,31 @@ public class Comunicazione {
 		return serverLog.registra(username,password,confPassword, nome, cognome);
 	}
 	
-	public SituazioneTombola aggTombolarmi(){
+	public SituazioneTombola aggTombolarmi() throws RemoteException{
 		return server.aggTombola();
 	}
 	
-	public SituazioneRubamazzo aggRubamazzoRmi(){
+	public SituazioneRubamazzo aggRubamazzoRmi() throws RemoteException{
 		return server.aggRubaMazzo();
 	}
 	
-	public ArrayList<EntryClassifica> aggClassGlobaleRmi() throws EccezioneClassificaVuota{
+	public ArrayList<EntryClassifica> aggClassGlobaleRmi() throws EccezioneClassificaVuota, RemoteException{
 		return server.aggClass();
 	}
 	
-	public ArrayList<EntryClassifica> aggClassGiornRmi() throws EccezioneClassificaVuota{
+	public ArrayList<EntryClassifica> aggClassGiornRmi() throws EccezioneClassificaVuota, RemoteException{
 		return server.aggClassGiorn();
 	}
 	
-	public boolean mossaRubamazzoRmi(Mossa m, int numPartita){
+	public boolean mossaRubamazzoRmi(Mossa m, int numPartita) throws RemoteException{
 		return server.mossaRubamazzo(m, numPartita);
 	}
 	
-	public boolean vintoTombolaRmi(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga) throws EccezioneUtente{
+	public boolean vintoTombolaRmi(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga) throws EccezioneUtente, RemoteException{
 		return server.vintoTombola(numPartita, tipoVittoria, indiceCartella, indiceRiga);
 	}
 	
-	public Rollata rollaRmi(){
+	public Rollata rollaRmi() throws RemoteException{
 		return server.rolla();
 	}
 	
