@@ -16,6 +16,7 @@ import rmiServer.RmiTaskControl;
 import userModel.InfoHome;
 import userModel.Utente;
 import comunicazione.Comunicazione;
+import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
 
 import java.awt.event.ActionListener;
@@ -96,7 +97,12 @@ public class RegisterGui extends JFrame {
 								JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 							}
 							else{
-								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
+								try {
+									home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
+								} catch (IOException | EccezioneClassificaVuota e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 								home.setVisible(true);
 							}
 					}
@@ -113,7 +119,7 @@ public class RegisterGui extends JFrame {
 								home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
 								home.setVisible(true);
 							}
-						} catch (RemoteException | EccezioneUtente e1) {
+						} catch (EccezioneUtente | IOException | EccezioneClassificaVuota e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}

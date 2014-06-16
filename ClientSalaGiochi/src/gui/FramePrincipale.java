@@ -39,13 +39,16 @@ public class FramePrincipale extends JFrame implements Runnable{
 	private boolean finito;
 	private ArrayList<EntryClassifica> classGlob;
 	private ArrayList<EntryClassifica> classGiorn;
-	
+	private JTextArea areaGlobale;
+	private JTextArea areaGiornaliera;
 	//costruire oggetto entry list
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
+	 * @throws EccezioneClassificaVuota 
 	 */
-	public FramePrincipale(String username,int crediti,final Comunicazione comunicazione) {
+	public FramePrincipale(String username,int crediti,final Comunicazione comunicazione) throws IOException, EccezioneClassificaVuota {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -81,10 +84,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 		JButton btnSlot = new JButton("Slot");
 		btnSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				slot = new SlotGui(comunicazione);
-							
-
 			}
 		});
 		btnSlot.setBounds(12, 111, 117, 25);
@@ -125,20 +125,37 @@ public class FramePrincipale extends JFrame implements Runnable{
 		lblGiornaliera.setBounds(240, 12, 99, 15);
 		pnlClassifica.add(lblGiornaliera);
 
-		JTextArea areaGlobale = new JTextArea();
+		areaGlobale = new JTextArea();
 		areaGlobale.setEditable(false);
 		areaGlobale.setBounds(12, 39, 170, 193);
 		pnlClassifica.add(areaGlobale);
 
-		JTextArea areaGiornaliera = new JTextArea();
+		areaGiornaliera = new JTextArea();
 		areaGiornaliera.setBounds(240, 39, 191, 193);
 		pnlClassifica.add(areaGiornaliera);
-		
+
 		JButton btnAggClass = new JButton("A");
 		btnAggClass.setBounds(407, 7, 24, 25);
 		pnlClassifica.add(btnAggClass);
+
+		if(comunicazione.getTipoCom()){
+			comunicazione.aggClassSocket();
+			classGlob = comunicazione.riceviClassificaGlobaleSocket();
+			classGiorn = comunicazione.riceviClassificaGiornalieraSocket(); 
+		}
+		else{
+			classGlob = comunicazione.aggClassGlobaleRmi();
+			classGiorn = comunicazione.aggClassGiornRmi();
+		}
+
+		for(int i = 0;i< classGlob.size();i++){
+			areaGlobale.append(classGlob.get(i).toString()+"\n");
+			
+			areaGiornaliera.append(classGiorn.get(i).toString()+"\n");
+		}
+
 	}
-	
+
 	public void run(){
 		while(finito == false){
 			try {
@@ -147,7 +164,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			if(comunicazione.getTipoCom()){
 				comunicazione.aggClassSocket();
 				try {
@@ -157,7 +174,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
 			else{
 				try {
@@ -167,9 +184,15 @@ public class FramePrincipale extends JFrame implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
-			
+
+			areaGlobale.removeAll();
+			areaGiornaliera.removeAll();
+			for(int i = 0;i< classGlob.size();i++){
+				areaGlobale.append(classGlob.get(i).toString()+"\n");
+				areaGiornaliera.append(classGiorn.get(i).toString()+"\n");
+			}
 		}
 	}
 }

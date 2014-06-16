@@ -16,6 +16,7 @@ import rmiServer.RmiTaskControl;
 import userModel.InfoHome;
 import userModel.Utente;
 import comunicazione.Comunicazione;
+import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
 
 import java.awt.event.ActionListener;
@@ -37,9 +38,11 @@ public class LoginGui extends JFrame {
 	/**
 	 * Create the frame.
 	 * @throws ParseException 
+	 * @throws EccezioneClassificaVuota 
+	 * @throws IOException 
 	 */
 	
-	public void invioLogin() throws ParseException{
+	public void invioLogin() throws ParseException, IOException, EccezioneClassificaVuota{
 		if(textUsername.getText() == "" && textPassword.getText() == ""){
 			JOptionPane.showMessageDialog(null, "riempi i campi username e password");
 		}
@@ -126,7 +129,7 @@ public class LoginGui extends JFrame {
 				
 				try {
 					invioLogin();
-				} catch (ParseException e1) {
+				} catch (ParseException | IOException | EccezioneClassificaVuota e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

@@ -27,11 +27,11 @@ public class SlotGui extends JFrame {
 	private JPanel contentPane;
 	private Comunicazione comunicazione;
 	private JLabel creditiTotali;
-	private ImageIcon dollaro = new ImageIcon("immaginiSlot/dollaro.jpg");
-	private ImageIcon mela = new ImageIcon("immaginiSlot/mela.jpg"); //simbolo 1
-	private ImageIcon ciliegia = new ImageIcon("immaginiSlot/ciliegia.jpg"); //simbolo 2
-	private ImageIcon uva = new ImageIcon("immaginiSlot/uva.jpg"); //simbolo 3 
-	private ImageIcon fragola = new ImageIcon("immaginiSlot/fragola.jpg"); //simbolo 4
+	private ImageIcon dollaro = new ImageIcon("/immaginiSlot/dollaro.jpg");
+	private ImageIcon mela = new ImageIcon("/immaginiSlot/mela.jpg"); //simbolo 1
+	private ImageIcon ciliegia = new ImageIcon("/immaginiSlot/ciliegia.jpg"); //simbolo 2
+	private ImageIcon uva = new ImageIcon("/immaginiSlot/uva.jpg"); //simbolo 3 
+	private ImageIcon fragola = new ImageIcon("/immaginiSlot/fragola.jpg"); //simbolo 4
 	private JLabel lblSimb1;
 	private JLabel lblSimb2;
 	private JLabel lblSimb3;

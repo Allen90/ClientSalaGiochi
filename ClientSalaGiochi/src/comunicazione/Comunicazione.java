@@ -133,6 +133,8 @@ public class Comunicazione {
 	
 	public ArrayList<EntryClassifica> riceviClassificaGlobaleSocket() throws IOException{
 		String s = reader.readLine();
+		System.out.println("qui appena ricevuto class");
+		System.out.println(s);
 		return Decoder.clientClassificaGlobale(s);
 	}
 	
