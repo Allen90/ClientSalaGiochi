@@ -43,6 +43,10 @@ public class Comunicazione {
 		System.out.println("creo reader e writer");
 	}
 	
+	public Comunicazione(){
+		tipoCom = false;
+	}
+	
 	public Comunicazione(RmiTaskControl server){
 		this.server = server;
 		tipoCom = false;
@@ -160,7 +164,7 @@ public class Comunicazione {
 	}
 	
 
-	public RmiTaskControl registraRmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente{
+	public RmiTaskControl registraRmi(String username, String password, String confPassword, String nome, String cognome) throws RemoteException, EccezioneUtente, ParseException{
 		return serverLog.registra(username,password,confPassword, nome, cognome);
 	}
 	
@@ -188,7 +192,7 @@ public class Comunicazione {
 		return server.vintoTombola(numPartita, tipoVittoria, indiceCartella, indiceRiga);
 	}
 	
-	public Rollata rollaRmi() throws RemoteException{
+	public Rollata rollaRmi() throws RemoteException, EccezioneUtente{
 		return server.rolla();
 	}
 	

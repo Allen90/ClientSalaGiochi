@@ -22,11 +22,15 @@ import eccezioni.EccezioneUtente;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.text.ParseException;
 
 public class LoginGui extends JFrame {
-
+	private static final String host = "127.0.0.1";
+	private static final String url = "rmi://127.0.0.1/server";
 	private JPanel contentPane;
 	private JTextField textUsername;
 	private JTextField textPassword;
@@ -40,9 +44,10 @@ public class LoginGui extends JFrame {
 	 * @throws ParseException 
 	 * @throws EccezioneClassificaVuota 
 	 * @throws IOException 
+	 * @throws NotBoundException 
 	 */
 	
-	public void invioLogin() throws ParseException, IOException, EccezioneClassificaVuota{
+	public void invioLogin() throws ParseException, IOException, EccezioneClassificaVuota, NotBoundException{
 		if(textUsername.getText() == "" && textPassword.getText() == ""){
 			JOptionPane.showMessageDialog(null, "riempi i campi username e password");
 		}
@@ -65,6 +70,7 @@ public class LoginGui extends JFrame {
 					else{
 						home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
 						home.setVisible(true);
+						this.setVisible(false);
 					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -73,15 +79,23 @@ public class LoginGui extends JFrame {
 			}
 			else{
 				try {
-					rmi = comunicazione.loginRmi(textUsername.getText(), textPassword.getText());
+					
+					if (System.getSecurityManager() == null) 
+						System.setSecurityManager(new SecurityManager()); 
+					Registry registry = LocateRegistry.getRegistry(host); 
+					//Recupero l’istanza della classe remota 
+					RmiServer server = (RmiServer) registry.lookup(url);
+					rmi = server.login(textUsername.getText(), textPassword.getText());
+					//rmi = comunicazione.registraRmi(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
 					if(rmi == null){
-						JOptionPane.showMessageDialog(null, "Login errato");
+						JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 					}
 					else{
 						Comunicazione c = new Comunicazione(rmi);
 						InfoHome ih = c.getInfoHome();
 						home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
 						home.setVisible(true);
+						this.setVisible(false);
 					}
 				} catch (RemoteException | EccezioneUtente e1) {
 					e1.printStackTrace();
@@ -129,7 +143,7 @@ public class LoginGui extends JFrame {
 				
 				try {
 					invioLogin();
-				} catch (ParseException | IOException | EccezioneClassificaVuota e1) {
+				} catch (ParseException | IOException | EccezioneClassificaVuota | NotBoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

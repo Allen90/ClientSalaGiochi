@@ -22,11 +22,15 @@ import eccezioni.EccezioneUtente;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.text.ParseException;
 
 public class RegisterGui extends JFrame {
-
+	private static final String host = "127.0.0.1";
+	private static final String url = "rmi://127.0.0.1/server";
 	private JPanel contentPane;
 	private JTextField textNome;
 	private JTextField textCognome;
@@ -41,8 +45,10 @@ public class RegisterGui extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws NotBoundException 
+	 * @throws ParseException 
 	 */
-	public void inviaRegistrazione(){
+	public void inviaRegistrazione() throws NotBoundException, ParseException{
 		if(textUsername.getText() == "" && textPassword.getText() == "" && textNome.getText() == "" && textCognome.getText() == "" && textConfPass.getText() == ""){
 			// dialog
 		}
@@ -73,12 +79,19 @@ public class RegisterGui extends JFrame {
 						e1.printStackTrace();
 					}
 					home.setVisible(true);
+					this.setVisible(false);
 				}
 			}
 			else{
 				System.out.println("qui in rmi");
 				try {
-					rmi = comunicazione.registraRmi(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
+					if (System.getSecurityManager() == null) 
+						System.setSecurityManager(new SecurityManager()); 
+					Registry registry = LocateRegistry.getRegistry(host); 
+					//Recupero l’istanza della classe remota 
+					RmiServer server = (RmiServer) registry.lookup(url);
+					rmi = server.registra(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
+					//rmi = comunicazione.registraRmi(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
 					if(rmi == null){
 						JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 					}
@@ -87,6 +100,7 @@ public class RegisterGui extends JFrame {
 						InfoHome ih = c.getInfoHome();
 						home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
 						home.setVisible(true);
+						this.setVisible(false);
 					}
 				} catch (EccezioneUtente | IOException | EccezioneClassificaVuota e1) {
 					// TODO Auto-generated catch block
@@ -130,7 +144,12 @@ public class RegisterGui extends JFrame {
 		btnRegistra = new JButton("Registra");
 		btnRegistra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				inviaRegistrazione();
+				try {
+					inviaRegistrazione();
+				} catch (NotBoundException | ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}});
 		btnRegistra.setBounds(294, 236, 144, 25);
 		contentPane.add(btnRegistra);

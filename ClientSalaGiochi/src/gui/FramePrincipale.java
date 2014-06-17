@@ -41,6 +41,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 	private ArrayList<EntryClassifica> classGiorn;
 	private JTextArea areaGlobale;
 	private JTextArea areaGiornaliera;
+	private int crediti;
 	//costruire oggetto entry list
 
 	/**
@@ -48,8 +49,9 @@ public class FramePrincipale extends JFrame implements Runnable{
 	 * @throws IOException 
 	 * @throws EccezioneClassificaVuota 
 	 */
-	public FramePrincipale(String username,int crediti,final Comunicazione comunicazione) throws IOException, EccezioneClassificaVuota {
-
+	public FramePrincipale(String username,int crediti,Comunicazione comunicazione) throws IOException, EccezioneClassificaVuota {
+		this.comunicazione = comunicazione;
+		this.crediti = crediti;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -70,21 +72,21 @@ public class FramePrincipale extends JFrame implements Runnable{
 		pnlHome.add(lblUsername);
 
 		JLabel labelUsername = new JLabel(username);
-		labelUsername.setBounds(102, 12, 70, 15);
+		labelUsername.setBounds(102, 12, 87, 15);
 		pnlHome.add(labelUsername);
 
 		JLabel Crediti = new JLabel("Crediti");
-		Crediti.setBounds(221, 12, 70, 15);
+		Crediti.setBounds(12, 36, 70, 15);
 		pnlHome.add(Crediti);
 
 		JLabel labelCrediti = new JLabel(""+crediti);
-		labelCrediti.setBounds(289, 12, 70, 15);
+		labelCrediti.setBounds(75, 36, 70, 15);
 		pnlHome.add(labelCrediti);
 
 		JButton btnSlot = new JButton("Slot");
 		btnSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				slot = new SlotGui(comunicazione);
+				attivaSlot();
 			}
 		});
 		btnSlot.setBounds(12, 111, 117, 25);
@@ -150,10 +152,15 @@ public class FramePrincipale extends JFrame implements Runnable{
 
 		for(int i = 0;i< classGlob.size();i++){
 			areaGlobale.append(classGlob.get(i).toString()+"\n");
-			
+
 			areaGiornaliera.append(classGiorn.get(i).toString()+"\n");
 		}
 
+	}
+
+	public void attivaSlot(){
+		slot = new SlotGui(comunicazione,crediti);
+		slot.setVisible(true);
 	}
 
 	public void run(){

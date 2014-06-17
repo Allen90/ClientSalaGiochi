@@ -29,6 +29,7 @@ public class ClientStartGUI {
 	private Comunicazione comunicazione;
 	private LoginGui login;
 	private RegisterGui register;
+	private JComboBox comboBox;
 	/**
 	 * Launch the application.
 	 */
@@ -69,7 +70,7 @@ public class ClientStartGUI {
 		lblSelezionaIlTipo.setBounds(12, 73, 253, 15);
 		frame.getContentPane().add(lblSelezionaIlTipo);
 
-		final JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"RMI", "Socket"}));
 		comboBox.setSelectedIndex(0);
 		comboBox.setBounds(262, 68, 85, 24);
@@ -82,14 +83,16 @@ public class ClientStartGUI {
 				int tipoComn = comboBox.getSelectedIndex();
 				if(tipoComn == 0){
 					try {
-						if (System.getSecurityManager() == null) 
-							System.setSecurityManager(new SecurityManager()); 
-						Registry registry = LocateRegistry.getRegistry(host); 
-						//Recupero l’istanza della classe remota 
-						RmiServer server = (RmiServer) registry.lookup(url);
-						comunicazione = new Comunicazione(server);
+//						if (System.getSecurityManager() == null) 
+//							System.setSecurityManager(new SecurityManager()); 
+//						Registry registry = LocateRegistry.getRegistry(host); 
+//						//Recupero l’istanza della classe remota 
+//						RmiServer server = (RmiServer) registry.lookup(url);
+//						comunicazione = new Comunicazione(server);
+						comunicazione = new Comunicazione();
 						register = new RegisterGui(comunicazione);
 						register.setVisible(true);
+						frame.setVisible(false);
 					} 
 					catch (Exception e1) {
 						e1.printStackTrace();
@@ -102,6 +105,7 @@ public class ClientStartGUI {
 						comunicazione = new Comunicazione(socket);
 						register = new RegisterGui(comunicazione);
 						register.setVisible(true);
+						frame.setVisible(false);
 					}
 					catch(Exception e1){
 						System.out.print("impossibile connettersi al server socket");
@@ -123,14 +127,15 @@ public class ClientStartGUI {
 				int tipoComn = comboBox.getSelectedIndex();
 				if(tipoComn == 0){
 					try {
-						if (System.getSecurityManager() == null) 
-							System.setSecurityManager(new SecurityManager()); 
-						Registry registry = LocateRegistry.getRegistry(host); 
-						//Recupero l’istanza della classe remota 
-						RmiServer server = (RmiServer) registry.lookup(url);
-						comunicazione = new Comunicazione(server);
+//						if (System.getSecurityManager() == null) 
+//							System.setSecurityManager(new SecurityManager()); 
+//						Registry registry = LocateRegistry.getRegistry(host); 
+//						//Recupero l’istanza della classe remota 
+//						RmiServer server = (RmiServer) registry.lookup(url);
+						comunicazione = new Comunicazione();
 						login = new LoginGui(comunicazione);
 						login.setVisible(true);
+						frame.setVisible(false);
 					} 
 					catch (Exception e1) {
 						e1.printStackTrace();
@@ -144,6 +149,7 @@ public class ClientStartGUI {
 						comunicazione = new Comunicazione(socket);
 						login = new LoginGui(comunicazione);
 						login.setVisible(true);
+						frame.setVisible(false);
 					}
 					catch(Exception e1){
 						System.out.print("impossibile connettersi al server socket");
