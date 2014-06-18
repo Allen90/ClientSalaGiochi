@@ -195,8 +195,10 @@ public class FramePrincipale extends JFrame implements Runnable{
 		System.out.println("numero cartelle selezionate dall'utente:" +numCartelle);
 		if(comunicazione.getTipoCom()){
 			comunicazione.giocoTombolaSocket(numCartelle);
+			System.out.println("inviata richiesta di gioco tombola");
 			try {
 				ok = comunicazione.riceviGiocoTombola();
+				System.out.println("risposta dal server " + ok);
 				if(ok){
 					comunicazione.aggTombolaSocket();
 					situazioneTomb = comunicazione.riceviAggTombolaSocket();
@@ -279,14 +281,19 @@ public class FramePrincipale extends JFrame implements Runnable{
 			int numSpawn = 0; // numero di volte inviato il messaggio di essere in coda
 
 			while(situazioneRuba == null){
-				Thread.sleep(3000);
-				if(situazioneRuba == null && numSpawn == 0){
-					JOptionPane.showMessageDialog(null, "Sei in coda per giocare a rubamazzo, attendi l'arrivo di un altro giocatore");
-					numSpawn++;
+				try {
+					Thread.sleep(3000);
+					if(situazioneRuba == null && numSpawn == 0){
+						JOptionPane.showMessageDialog(null, "Sei in coda per giocare a rubamazzo, attendi l'arrivo di un altro giocatore");
+						numSpawn++;
+					}
+				} catch (InterruptedException e) {
+					System.out.print("impossibile eseguire sleep richiesta");
 				}
 				
+				
 			}
-			rubamazzo = new RubamazzoGui(comunicazione, situazioneTomb);
+			rubamazzo = new RubamazzoGui(comunicazione, situazioneRuba);
 		}
 		else
 			JOptionPane.showMessageDialog(null, "crediti insufficienti per giocare a tombola");

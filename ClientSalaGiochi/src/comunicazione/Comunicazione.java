@@ -64,6 +64,7 @@ public class Comunicazione {
 	
 	public void giocoTombolaSocket(int numCartelle){
 		writer.println(Encoder.clientGiocoTombola(numCartelle));
+		writer.flush();
 	}
 	
 	public void giocoRubamazzoSocket(){
@@ -82,6 +83,8 @@ public class Comunicazione {
 	
 	public void aggTombolaSocket(){
 		writer.println(Encoder.clientAggiornaTombola);
+		writer.flush();
+		System.out.println("inviato al server " + Encoder.clientAggiornaTombola);
 	}
 	
 	public void aggRubamazzoSocket(){
@@ -106,6 +109,8 @@ public class Comunicazione {
 	
 	public SituazioneTombola riceviAggTombolaSocket() throws IOException{
 		String s = reader.readLine();
+		System.out.println("sono nella classe comunicazione ricevi aggTombola ho letto:");
+		System.out.println(s);
 		SituazioneTombola sit = Decoder.clientAggTombola(s);
 		return sit;
 	}
@@ -203,8 +208,13 @@ public class Comunicazione {
 	}
 	
 	public boolean riceviGiocoTombola() throws IOException{
+		System.out.println("sono nella classe comunicazione ricevi gioco tmbola ho letto:");
 		String s = reader.readLine();
+		String s2 = reader.readLine();
+		System.out.println(s);
+		System.out.println(s2);
 		return Decoder.clientResponseGiocoTombola(s);
+		
 	}
 	
 	public boolean riceviGiocoRubamazzo() throws IOException{
