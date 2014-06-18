@@ -30,6 +30,7 @@ import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 public class TombolaGui extends JFrame implements Runnable{
 
@@ -114,12 +115,8 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+				} catch (IOException | EccezioneUtente e1) {
 					System.out.print("impossibile ricevere una risposta dal server");
-				} catch (EccezioneUtente e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 			}
 		});
@@ -138,12 +135,8 @@ public class TombolaGui extends JFrame implements Runnable{
 					else{
 						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
 					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+				} catch (IOException | EccezioneUtente e1) {
 					System.out.print("impossibile ricevere una risposta dal server");
-				} catch (EccezioneUtente e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 			}
 		});
@@ -805,8 +798,13 @@ public class TombolaGui extends JFrame implements Runnable{
 
 	public void aggiornaCartella(ArrayList<JLabel> tabellina, int indice){
 		for(int i = 0;i<3;i++)
-			for(int j=0;j<9;j++)
-				tabellina.set(i*j, new JLabel(""+situazione.getTabella(indice).getNumero(i, j)));		
+			for(int j=0;j<9;j++){
+				tabellina.set(i*j, new JLabel(""+situazione.getTabella(indice).getNumero(i, j)));
+				if(situazione.getTabella(indice).isEstratto(i,j)){
+					tabellina.get(i).setBackground(Color.RED);
+				}
+						
+			}
 	}
 
 	public void run(){

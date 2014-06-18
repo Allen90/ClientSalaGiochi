@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.io.IOException;
 import java.net.Socket;
 import java.rmi.RemoteException;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -19,7 +21,9 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
 import comunicazione.Comunicazione;
+import rubamazzo.SituazioneRubamazzo;
 import slot.Slot;
+import tombola.SituazioneTombola;
 import userModel.EntryClassifica;
 import userModel.Utente;
 
@@ -29,6 +33,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 
 import eccezioni.EccezioneClassificaVuota;
+import eccezioni.EccezioneUtente;
 
 public class FramePrincipale extends JFrame implements Runnable{
 
@@ -36,12 +41,18 @@ public class FramePrincipale extends JFrame implements Runnable{
 	private Utente utente;
 	private Comunicazione comunicazione;
 	private SlotGui slot;
+	private TombolaGui tombola;
+	private RubamazzoGui rubamazzo;
 	private boolean finito;
 	private ArrayList<EntryClassifica> classGlob;
 	private ArrayList<EntryClassifica> classGiorn;
 	private JTextArea areaGlobale;
 	private JTextArea areaGiornaliera;
 	private int crediti;
+	private JComboBox comboTombola;
+	private SituazioneTombola situazioneTomb;
+	private SituazioneRubamazzo situazioneRuba;
+	private JButton btnRubamazzo;
 	//costruire oggetto entry list
 
 	/**
@@ -93,14 +104,29 @@ public class FramePrincipale extends JFrame implements Runnable{
 		pnlHome.add(btnSlot);
 
 		JButton btnTombola = new JButton("Tombola");
+		btnTombola.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				try {
+					attivaTombola();
+				} catch (HeadlessException | InterruptedException e1) {
+					System.out.println("impossibile inviare richiesta di gioco tombola");
+				}
+			}
+		});
 		btnTombola.setBounds(167, 111, 117, 25);
 		pnlHome.add(btnTombola);
 
-		JButton btnRubamazzo = new JButton("Rubamazzo");
+		btnRubamazzo = new JButton("Rubamazzo");
+		btnRubamazzo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				attivaRubamazzo();
+			}
+		});
 		btnRubamazzo.setBounds(314, 111, 117, 25);
 		pnlHome.add(btnRubamazzo);
 
-		JComboBox comboTombola = new JComboBox();
+		comboTombola = new JComboBox();
 		comboTombola.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
 		comboTombola.setSelectedIndex(0);
 		comboTombola.setBounds(192, 175, 70, 24);
@@ -161,6 +187,109 @@ public class FramePrincipale extends JFrame implements Runnable{
 	public void attivaSlot(){
 		slot = new SlotGui(comunicazione,crediti);
 		slot.setVisible(true);
+	}
+
+	public void attivaTombola() throws HeadlessException, InterruptedException{
+		boolean ok = false;
+		int numCartelle = comboTombola.getSelectedIndex()+1;
+		System.out.println("numero cartelle selezionate dall'utente:" +numCartelle);
+		if(comunicazione.getTipoCom()){
+			comunicazione.giocoTombolaSocket(numCartelle);
+			try {
+				ok = comunicazione.riceviGiocoTombola();
+				if(ok){
+					comunicazione.aggTombolaSocket();
+					situazioneTomb = comunicazione.riceviAggTombolaSocket();
+				}
+			} catch (IOException e) {
+				System.out.println("impossibile ricevere dal server una risposta sulla richiesta mandata");
+			}
+		}
+		else{
+			try {
+				ok = comunicazione.giocoTombolaRmi(numCartelle);
+				if(ok){
+					situazioneTomb = comunicazione.aggTombolarmi();
+				}
+
+			} catch (RemoteException | EccezioneUtente e) {
+				System.out.println("impossibile inviare richiesta di gioco tombola");
+			}
+		}
+		if(ok){
+			int numSpawn = 0; // numero di volte inviato il messaggio di essere in coda
+
+			while(situazioneTomb == null){
+				Thread.sleep(3000);
+				if(situazioneTomb == null && numSpawn == 0){
+					JOptionPane.showMessageDialog(null, "Sei in coda per giocare a tombola, attendi l'arrivo di un altro giocatore");
+					numSpawn++;
+				}
+				if(comunicazione.getTipoCom())
+				{
+					
+					try {
+						comunicazione.aggTombolaSocket();
+						situazioneTomb = comunicazione.riceviAggTombolaSocket();
+					} catch (IOException e) {
+						System.out.println("impossibile inviare richiesta di gioco tombola");
+					}
+				}
+				else{
+					try {
+						situazioneTomb = comunicazione.aggTombolarmi();
+					} catch (RemoteException e) {
+						System.out.println("impossibile inviare richiesta di gioco tombola");
+					}
+				}
+			}
+			tombola = new TombolaGui(numCartelle,situazioneTomb,comunicazione);
+		}
+		else
+			JOptionPane.showMessageDialog(null, "crediti insufficienti per giocare a tombola");
+	}
+
+
+	public void attivaRubamazzo(){
+		boolean ok = false;
+		if(comunicazione.getTipoCom()){
+			comunicazione.giocoRubamazzoSocket();
+			try {
+				ok = comunicazione.riceviGiocoRubamazzo();
+				if(ok){
+					comunicazione.aggRubamazzoSocket();
+					situazioneRuba = comunicazione.riceviAggRubamazzoSocket();
+				}
+			} catch (IOException e) {
+				System.out.println("impossibile ricevere dal server una risposta sulla richiesta mandata");
+			}
+		}
+		else{
+			try {
+				ok = comunicazione.giocoRubamazzoRmi();
+				if(ok){
+					situazioneRuba = comunicazione.aggRubamazzoRmi();
+				}
+
+			} catch (RemoteException | EccezioneUtente e) {
+				System.out.println("impossibile inviare richiesta di gioco tombola");
+			}
+		}
+		if(ok){
+			int numSpawn = 0; // numero di volte inviato il messaggio di essere in coda
+
+			while(situazioneRuba == null){
+				Thread.sleep(3000);
+				if(situazioneRuba == null && numSpawn == 0){
+					JOptionPane.showMessageDialog(null, "Sei in coda per giocare a rubamazzo, attendi l'arrivo di un altro giocatore");
+					numSpawn++;
+				}
+				
+			}
+			rubamazzo = new RubamazzoGui(comunicazione, situazioneTomb);
+		}
+		else
+			JOptionPane.showMessageDialog(null, "crediti insufficienti per giocare a tombola");
 	}
 
 	public void run(){

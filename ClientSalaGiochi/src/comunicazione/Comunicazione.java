@@ -152,6 +152,7 @@ public class Comunicazione {
 	}
 	
 	public boolean giocoTombolaRmi(int numCartelle) throws EccezioneUtente, RemoteException{
+		System.out.println("numero cartelle selezionate dall'utente:" +numCartelle);
 		return server.giocoTombola(numCartelle);
 	}
 	
@@ -201,7 +202,14 @@ public class Comunicazione {
 		return Decoder.clientResponseVintoTombola(s);
 	}
 	
+	public boolean riceviGiocoTombola() throws IOException{
+		String s = reader.readLine();
+		return Decoder.clientResponseGiocoTombola(s);
+	}
 	
-	
+	public boolean riceviGiocoRubamazzo() throws IOException{
+		String s = reader.readLine();
+		return Decoder.clientResponseGiocoRubamazzo(s);
+	}
 
 }
