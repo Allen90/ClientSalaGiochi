@@ -192,13 +192,10 @@ public class FramePrincipale extends JFrame implements Runnable{
 	public void attivaTombola() throws HeadlessException, InterruptedException{
 		boolean ok = false;
 		int numCartelle = comboTombola.getSelectedIndex()+1;
-		System.out.println("numero cartelle selezionate dall'utente:" +numCartelle);
 		if(comunicazione.getTipoCom()){
 			comunicazione.giocoTombolaSocket(numCartelle);
-			System.out.println("inviata richiesta di gioco tombola");
 			try {
 				ok = comunicazione.riceviGiocoTombola();
-				System.out.println("risposta dal server " + ok);
 				if(ok){
 					comunicazione.aggTombolaSocket();
 					situazioneTomb = comunicazione.riceviAggTombolaSocket();
@@ -246,6 +243,9 @@ public class FramePrincipale extends JFrame implements Runnable{
 				}
 			}
 			tombola = new TombolaGui(numCartelle,situazioneTomb,comunicazione);
+			Thread t = new Thread(tombola);
+			t.start();
+			tombola.setVisible(true);
 		}
 		else
 			JOptionPane.showMessageDialog(null, "crediti insufficienti per giocare a tombola");

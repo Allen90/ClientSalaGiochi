@@ -17,7 +17,9 @@ import javax.swing.JTable;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 
+import tombola.Casella;
 import tombola.SituazioneTombola;
+import tombola.Tabellone;
 import comunicazione.Comunicazione;
 
 import javax.swing.JComboBox;
@@ -70,6 +72,8 @@ public class TombolaGui extends JFrame implements Runnable{
 	private JPanel pnlTabellina4;
 	private Comunicazione comunicazione;
 	private boolean response;
+	private int numCartelle;
+	private JPanel pnlTabellone;
 	/**
 	 * Create the frame.
 	 */
@@ -78,6 +82,7 @@ public class TombolaGui extends JFrame implements Runnable{
 
 	public TombolaGui(int numCartelle, SituazioneTombola situzione,Comunicazione comunicazione) {
 		this.situazione = situazione;
+		this.numCartelle = numCartelle;
 		this.comunicazione = comunicazione;
 		tabellina1 = new ArrayList<JLabel>();
 		tabellina2 = new ArrayList<JLabel>();
@@ -544,7 +549,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTombola2.setBounds(522, 192, 117, 25);
 		contentPane.add(btnTombola2);
 
-		JPanel pnlTabellone = new JPanel();
+		pnlTabellone = new JPanel();
 		pnlTabellone.setBounds(396, 243, 371, 427);
 		contentPane.add(pnlTabellone);
 		pnlTabellone.setLayout(new GridLayout(10, 9, 0, 0));
@@ -803,48 +808,94 @@ public class TombolaGui extends JFrame implements Runnable{
 				if(situazione.getTabella(indice).isEstratto(i,j)){
 					tabellina.get(i).setBackground(Color.RED);
 				}
-						
+
 			}
 	}
 
+	public void aggiornaTabellone(){
+		Casella[][] c = situazione.getTabellone().getTabellone();
+		pnlTabellone.removeAll();
+		for(int i = 0 ; i< Tabellone.N_RIGHE; i++){
+			for(int j= 0; j< Tabellone.N_COLONNE; j++){
+				JLabel l = new JLabel(""+ c[i][j].getNumero());
+				if(c[i][j].isEstratto())
+					l.setBackground(Color.RED);
+				pnlTabellone.add(l);
+			}
+		}
+	}
+
 	public void run(){
-		try {
-			Thread.sleep(2000);
-			if(comunicazione.getTipoCom()){
-				comunicazione.aggTombolaSocket();
-				situazione = comunicazione.riceviAggTombolaSocket();
-
+		while(true){
+			try {
+				Thread.sleep(2000);
+				if(comunicazione.getTipoCom()){
+					comunicazione.aggTombolaSocket();
+					situazione = comunicazione.riceviAggTombolaSocket();
+				}
+				else {
+					situazione = comunicazione.aggTombolarmi();
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				System.out.println("impossibile fare la sleep");
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("impossibile ricevere dal server l'aggiornamento tombola");
 			}
-			else {
-				situazione = comunicazione.aggTombolarmi();
+			System.out.println("sto aggiornando il tabellone");
+			aggiornaTabellone();
+			aggiorna1(combo1.getSelectedIndex());
+			aggiorna2(combo2.getSelectedIndex());
+			aggiorna3(combo3.getSelectedIndex());
+			aggiorna4(combo4.getSelectedIndex());
+			switch(numCartelle){
+			case 1:{
+				aggiornaCartella(tabellina1,0);
+				pnlTabellina1.removeAll();
+				for(int i = 0; i<27; i++)
+					pnlTabellina1.add(tabellina1.get(i));
+				break;
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			System.out.println("impossibile fare la sleep");
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("impossibile ricevere dal server l'aggiornamento tombola");
+			case 2:{
+				aggiornaCartella(tabellina1,0);
+				aggiornaCartella(tabellina2,1);pnlTabellina1.removeAll();
+				pnlTabellina2.removeAll();for(int i = 0; i<27; i++){
+					pnlTabellina1.add(tabellina1.get(i));
+					pnlTabellina2.add(tabellina2.get(i));
+				}
+				break;}
+			case 3:{
+				aggiornaCartella(tabellina1,0);
+				aggiornaCartella(tabellina2,1);
+				aggiornaCartella(tabellina3,2);pnlTabellina1.removeAll();
+				pnlTabellina2.removeAll();
+				pnlTabellina3.removeAll();for(int i = 0; i<27; i++){
+					pnlTabellina1.add(tabellina1.get(i));
+					pnlTabellina2.add(tabellina2.get(i));
+					pnlTabellina3.add(tabellina3.get(i));
+				}
+				break;
+			}
+			case 4:{
+				aggiornaCartella(tabellina1,0);
+				aggiornaCartella(tabellina2,1);
+				aggiornaCartella(tabellina3,2);
+				aggiornaCartella(tabellina4,3);
+				pnlTabellina1.removeAll();
+				pnlTabellina2.removeAll();
+				pnlTabellina3.removeAll();
+				pnlTabellina4.removeAll();
+				for(int i = 0; i<27; i++){
+					pnlTabellina1.add(tabellina1.get(i));
+					pnlTabellina2.add(tabellina2.get(i));
+					pnlTabellina3.add(tabellina3.get(i));
+					pnlTabellina4.add(tabellina4.get(i));
+				}break;
+			}
+			}
 		}
-		aggiorna1(combo1.getSelectedIndex());
-		aggiorna2(combo2.getSelectedIndex());
-		aggiorna3(combo3.getSelectedIndex());
-		aggiorna4(combo4.getSelectedIndex());
-		aggiornaCartella(tabellina1,0);
-		aggiornaCartella(tabellina2,1);
-		aggiornaCartella(tabellina3,2);
-		aggiornaCartella(tabellina4,3);
-		pnlTabellina1.removeAll();
-		pnlTabellina2.removeAll();
-		pnlTabellina3.removeAll();
-		pnlTabellina4.removeAll();
-		for(int i = 0; i<27; i++){
-			pnlTabellina1.add(tabellina1.get(i));
-			pnlTabellina2.add(tabellina2.get(i));
-			pnlTabellina3.add(tabellina3.get(i));
-			pnlTabellina4.add(tabellina4.get(i));
-		}
-
 	}
 }
 

@@ -72,9 +72,7 @@ public class Comunicazione {
 	}
 	
 	public void loginSocket(String username,String password){
-		System.out.println("Stringa da inviare"+Encoder.clientLogin(username, password));
 		writer.println(Encoder.clientLogin(username, password));
-		System.out.println("stringa inviata");
 	}
 	
 	public void registraSocket(String username, String password, String confPassword, String nome, String cognome){
@@ -83,8 +81,6 @@ public class Comunicazione {
 	
 	public void aggTombolaSocket(){
 		writer.println(Encoder.clientAggiornaTombola);
-		writer.flush();
-		System.out.println("inviato al server " + Encoder.clientAggiornaTombola);
 	}
 	
 	public void aggRubamazzoSocket(){
@@ -109,8 +105,6 @@ public class Comunicazione {
 	
 	public SituazioneTombola riceviAggTombolaSocket() throws IOException{
 		String s = reader.readLine();
-		System.out.println("sono nella classe comunicazione ricevi aggTombola ho letto:");
-		System.out.println(s);
 		SituazioneTombola sit = Decoder.clientAggTombola(s);
 		return sit;
 	}
@@ -128,7 +122,6 @@ public class Comunicazione {
 	}
 	
 	public InfoHome riceviLoginSocket() throws IOException, ParseException{
-		System.out.println("qui prima di leggere stringa");
 		String s = reader.readLine();
 		InfoHome ih = Decoder.clientAccesso(s);
 		return ih;
@@ -142,8 +135,6 @@ public class Comunicazione {
 	
 	public ArrayList<EntryClassifica> riceviClassificaGlobaleSocket() throws IOException{
 		String s = reader.readLine();
-		System.out.println("qui appena ricevuto class");
-		System.out.println(s);
 		return Decoder.clientClassificaGlobale(s);
 	}
 	
@@ -157,7 +148,6 @@ public class Comunicazione {
 	}
 	
 	public boolean giocoTombolaRmi(int numCartelle) throws EccezioneUtente, RemoteException{
-		System.out.println("numero cartelle selezionate dall'utente:" +numCartelle);
 		return server.giocoTombola(numCartelle);
 	}
 	
@@ -208,11 +198,7 @@ public class Comunicazione {
 	}
 	
 	public boolean riceviGiocoTombola() throws IOException{
-		System.out.println("sono nella classe comunicazione ricevi gioco tmbola ho letto:");
 		String s = reader.readLine();
-		String s2 = reader.readLine();
-		System.out.println(s);
-		System.out.println(s2);
 		return Decoder.clientResponseGiocoTombola(s);
 		
 	}
@@ -220,6 +206,11 @@ public class Comunicazione {
 	public boolean riceviGiocoRubamazzo() throws IOException{
 		String s = reader.readLine();
 		return Decoder.clientResponseGiocoRubamazzo(s);
+	}
+	
+	public boolean riceviMossaRubamazzo() throws IOException{
+		String s = reader.readLine();
+		return Decoder.clientResponseMossaRubamazzo(s);
 	}
 
 }
