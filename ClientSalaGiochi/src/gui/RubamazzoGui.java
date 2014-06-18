@@ -1,8 +1,5 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -17,44 +14,54 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.border.MatteBorder;
-import javax.swing.UIManager;
+import java.util.ArrayList;
+
+import rubamazzo.Carta;
+import rubamazzo.SituazioneRubamazzo;
+
+import comunicazione.Comunicazione;
 
 public class RubamazzoGui extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	/**
-	 * @wbp.nonvisual location=182,709
-	 */
 	private final ButtonGroup bgMano = new ButtonGroup();
-	/**
-	 * @wbp.nonvisual location=182,249
-	 */
-	private final ButtonGroup bgBottini = new ButtonGroup();
+	private final ButtonGroup bgCarteAvversari = new ButtonGroup();
+	private Comunicazione comunicazione;
+	private SituazioneRubamazzo situazione;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RubamazzoGui frame = new RubamazzoGui();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	//panel dei bottini avversari
+	JPanel panelCarteAvversari;
+	private ArrayList<JLabel> labelCarteAvversari;
+	JPanel panelRadioAvversari;
+	private ArrayList<JRadioButton> radioCarteAvversari;
 
-	/**
-	 * Create the frame.
-	 */
-	public RubamazzoGui() {
+	//panel del banco
+	JPanel panelCarteBanco;
+	private ArrayList<JLabel> labelCarteBanco;
+	JPanel panelCheckBanco;
+	private ArrayList<JCheckBox> checkCarteBanco;
+
+	//panel della propria mano
+	JPanel panelCarteMano;
+	private ArrayList<JLabel> labelCarteMano;
+	JPanel panelRadioMano;
+	private ArrayList<JRadioButton> radioCarteMano;
+	JPanel panelBottino;
+	JLabel labelBottino;
+
+	//pannelli bottone gioca e log 
+	JPanel panelBottoneGioco;
+	JButton buttonGioco;
+	JPanel panelLog;
+	JTextPane textPaneLog;
+
+	public RubamazzoGui(Comunicazione comunicazione, SituazioneRubamazzo situazione) {
+		this.comunicazione = comunicazione;
+		this.situazione = situazione;
+
+
+
 		setResizable(false);
 		setTitle("Rubamazzo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,96 +70,183 @@ public class RubamazzoGui extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JPanel panelCarteAvversari = new JPanel();
+
+
+		//panel dei bottini avversari
+		labelCarteAvversari = new ArrayList<>();
+		panelCarteAvversari = new JPanel();
 		panelCarteAvversari.setBounds(200, 0, 500, 200);
+		panelCarteAvversari.setLayout(new GridLayout(1, situazione.getBottini().size(), 0, 0));
 		contentPane.add(panelCarteAvversari);
-		
-		JPanel panelRadioAvversari = new JPanel();
+
+		radioCarteAvversari = new ArrayList<>();
+		panelRadioAvversari = new JPanel();
 		panelRadioAvversari.setBounds(200, 200, 500, 30);
 		contentPane.add(panelRadioAvversari);
-		panelRadioAvversari.setLayout(new GridLayout(1, 3, 0, 0));
-		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("New radio button");
-		rdbtnNewRadioButton_1.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioAvversari.add(rdbtnNewRadioButton_1);
-		
-		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("New radio button");
-		rdbtnNewRadioButton_2.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioAvversari.add(rdbtnNewRadioButton_2);
-		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
-		rdbtnNewRadioButton.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioAvversari.add(rdbtnNewRadioButton);
-		
-		JPanel panelCarteBanco = new JPanel();
+		panelRadioAvversari.setLayout(new GridLayout(1, situazione.getBottini().size(), 0, 0));
+
+
+		//panel del banco
+		labelCarteBanco = new ArrayList<>();
+		panelCarteBanco = new JPanel();
 		panelCarteBanco.setBounds(0, 230, 994, 200);
 		contentPane.add(panelCarteBanco);
-		panelCarteBanco.setLayout(new GridLayout(1, 10, 0, 0));
-		
-		JPanel panelRadioBanco = new JPanel();
-		panelRadioBanco.setBounds(0, 430, 994, 30);
-		contentPane.add(panelRadioBanco);
-		panelRadioBanco.setLayout(new GridLayout(1, 3, 0, 0));
-		
-		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("New check box");
-		chckbxNewCheckBox_1.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioBanco.add(chckbxNewCheckBox_1);
-		
-		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("New check box");
-		chckbxNewCheckBox_2.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioBanco.add(chckbxNewCheckBox_2);
-		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("New check box");
-		chckbxNewCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioBanco.add(chckbxNewCheckBox);
-		
-		JPanel panelCarteMano = new JPanel();
+		panelCarteBanco.setLayout(new GridLayout(1, situazione.getBanco().size(), 0, 0));
+
+		checkCarteBanco = new ArrayList<>();
+		panelCheckBanco = new JPanel();
+		panelCheckBanco.setBounds(0, 430, 994, 30);
+		contentPane.add(panelCheckBanco);
+		panelCheckBanco.setLayout(new GridLayout(1, situazione.getBanco().size(), 0, 0));
+
+
+		//panel della propria mano
+		labelCarteMano = new ArrayList<>();
+		panelCarteMano = new JPanel();
 		panelCarteMano.setBounds(200, 460, 500, 209);
 		contentPane.add(panelCarteMano);
-		panelCarteMano.setLayout(new GridLayout(1, 3, 0, 0));
-		
-		JPanel panelRadioMano = new JPanel();
+		panelCarteMano.setLayout(new GridLayout(1, situazione.getMano().size(), 0, 0));
+
+		radioCarteMano = new ArrayList<>();
+		panelRadioMano = new JPanel();
 		panelRadioMano.setBounds(200, 670, 500, 30);
 		contentPane.add(panelRadioMano);
-		panelRadioMano.setLayout(new GridLayout(1, 3, 0, 0));
-		
-		JRadioButton radioMano0 = new JRadioButton("");
-		radioMano0.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioMano.add(radioMano0);
-		
-		JRadioButton radioMano1 = new JRadioButton("");
-		radioMano1.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioMano.add(radioMano1);
-		
-		JRadioButton radioMano2 = new JRadioButton("");
-		radioMano2.setHorizontalAlignment(SwingConstants.CENTER);
-		panelRadioMano.add(radioMano2);
-		
-		JPanel panelBottino = new JPanel();
+		panelRadioMano.setLayout(new GridLayout(1, situazione.getMano().size(), 0, 0));
+
+		panelBottino = new JPanel();
 		panelBottino.setBounds(0, 460, 200, 240);
 		contentPane.add(panelBottino);
 		panelBottino.setLayout(new GridLayout(1, 1, 0, 0));
+
+		labelBottino = new JLabel();
+		labelBottino.setHorizontalAlignment(SwingConstants.CENTER);
+		panelBottino.add(labelBottino);
+
+		//pannelli bottone gioca e log 
+		panelBottoneGioco = new JPanel();
+		panelBottoneGioco.setBounds(700, 460, 294, 240);
+		contentPane.add(panelBottoneGioco);
+		panelBottoneGioco.setLayout(null);
+
+		buttonGioco = new JButton("Gioca");
+		buttonGioco.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO
+			}
+		});
+		buttonGioco.setBounds(92, 65, 100, 100);
+		panelBottoneGioco.add(buttonGioco);
+
+		panelLog = new JPanel();
+		panelLog.setBounds(700, 0, 294, 230);
+		contentPane.add(panelLog);
+		panelLog.setLayout(new GridLayout(1, 0, 0, 0));
+
+		textPaneLog = new JTextPane();
+		panelLog.add(textPaneLog);
 		
-		JLabel lblNewLabel = new JLabel("Bottino");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panelBottino.add(lblNewLabel);
+		aggiornaTavolo();
+	}
+
+	public String getPath(Carta c){
+		return "/immaginiCarte/"+c.toString()+".png";
+	}
+	
+	public String getPathRetroVert(){
+		return "/immaginiCarte/RETRO#VERT#.png";
+	}
+	
+	public void aggiornaTavolo(){
+		//panel dei bottini avversari
+		JRadioButton temp;
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(700, 460, 294, 240);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		panelCarteAvversari.removeAll();
+		labelCarteAvversari.removeAll(labelCarteAvversari);
+		for(int i = 0; i < situazione.getBottini().size(); i++){
+			labelCarteAvversari.add(new JLabel());
+			labelCarteAvversari.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBottiniAltrui().get(i)))));
+			panelCarteAvversari.add(labelCarteAvversari.get(i));
+		}
+
+		panelRadioAvversari.removeAll();
+		for(int i = 0; i < situazione.getBottini().size(); i++){
+			bgCarteAvversari.remove(radioCarteAvversari.get(i));
+		}
+		radioCarteAvversari.removeAll(radioCarteAvversari);	
+		for(int i = 0; i < situazione.getBottini().size(); i++){
+			temp = new JRadioButton("");
+			radioCarteAvversari.add(temp);
+			panelRadioAvversari.add(radioCarteAvversari.get(i));
+			bgCarteAvversari.add(radioCarteAvversari.get(i));
+		}
+
+		//panel del banco
+		panelCarteBanco.removeAll();
+		labelCarteBanco.removeAll(labelCarteBanco);
+		for(int i = 0; i < situazione.getBanco().size(); i++){
+			labelCarteBanco.add(new JLabel(""));
+			labelCarteBanco.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBanco().get(i)))));
+			panelCarteBanco.add(labelCarteBanco.get(i));
+		}
+		panelCheckBanco.removeAll();
+		checkCarteBanco.removeAll(checkCarteBanco);	
+		for(int i = 0; i < situazione.getBanco().size(); i++){
+			checkCarteBanco.add(new JCheckBox(""));
+			panelCheckBanco.add(checkCarteBanco.get(i));
+		}
+
+		//panel della propria mano
+		panelCarteMano.removeAll();
+		labelCarteMano.removeAll(labelCarteMano);
+		for(int i = 0; i < situazione.getMano().size(); i++){
+			labelCarteMano.add(new JLabel(""));
+			labelCarteMano.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBanco().get(i)))));
+			panelCarteMano.add(labelCarteMano.get(i));
+		}
+
+		panelRadioMano.removeAll();
+		for(int i = 0; i < situazione.getMano().size(); i++){
+			bgMano.remove(radioCarteMano.get(i));
+		}
+		radioCarteMano.removeAll(radioCarteMano);	
+		for(int i = 0; i < situazione.getMano().size(); i++){
+			temp = new JRadioButton("");
+			radioCarteMano.add(temp);
+			panelRadioMano.add(radioCarteMano.get(i));
+			bgMano.add(radioCarteMano.get(i));
+		}
+		if(situazione.getMioBottino() != null) 
+			labelBottino.setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getMioBottino()))));
+		else 
+			labelBottino.setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPathRetroVert())));
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(92, 65, 100, 100);
-		panel.add(btnNewButton);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(700, 0, 294, 230);
-		contentPane.add(panel_1);
-		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JTextPane textPane = new JTextPane();
-		panel_1.add(textPane);
+		//pannelli bottone gioca e log 
+
+	}
+	
+	private int contaSelectBanco(){
+		int quanti = 0;
+		for(int i = 0; i < checkCarteBanco.size(); i++)
+			if(checkCarteBanco.get(i).isSelected())
+				quanti ++;
+		return quanti;
+	}
+	
+	private int getTipoMossa(){
+		if(bgMano.getSelection() == null)
+			return -1;
+		else if(contaSelectBanco() > 0 && bgCarteAvversari.getSelection() != null)
+			return -1;
+		else if(bgCarteAvversari.getSelection() == null){
+			switch(contaSelectBanco()){
+			case 0:
+				return 0;
+			case 1:
+				return 1;
+			default: 
+				return 2;
+			}
+		}else
+			return 3;
 	}
 }
