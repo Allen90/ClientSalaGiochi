@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import tombola.Casella;
 import tombola.SituazioneTombola;
+import tombola.Tabella;
 import tombola.Tabellone;
 import comunicazione.Comunicazione;
 
@@ -34,8 +35,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
-public class TombolaGui extends JFrame implements Runnable{
+import javax.swing.JTextField;
 
+public class TombolaGui extends JFrame implements Runnable{
+	private boolean occupato;
 	private JPanel contentPane;
 	private ArrayList<JLabel> tabellina1;
 	private ArrayList<JLabel> tabellina2;
@@ -74,6 +77,9 @@ public class TombolaGui extends JFrame implements Runnable{
 	private boolean response;
 	private int numCartelle;
 	private JPanel pnlTabellone;
+	private JLabel lblUltimoEstratto;
+	private Object lock;
+	private InvioVittorie
 	/**
 	 * Create the frame.
 	 */
@@ -81,20 +87,19 @@ public class TombolaGui extends JFrame implements Runnable{
 
 
 	public TombolaGui(int numCartelle, SituazioneTombola situzione,Comunicazione comunicazione) {
+		
+		
+		
 		this.situazione = situazione;
 		this.numCartelle = numCartelle;
 		this.comunicazione = comunicazione;
-		tabellina1 = new ArrayList<JLabel>();
-		tabellina2 = new ArrayList<JLabel>();
-		tabellina3 = new ArrayList<JLabel>();
-		tabellina4 = new ArrayList<JLabel>();
 
-		for(int i = 0;i<27;i++){
-			tabellina1.add(new JLabel("0"));
-			tabellina2.add(new JLabel("0"));
-			tabellina3.add(new JLabel("0"));
-			tabellina4.add(new JLabel("0"));
-		}
+		//		for(int i = 0;i<27;i++){
+		//			tabellina1.add(new JLabel("0"));
+		//			tabellina2.add(new JLabel("0"));
+		//			tabellina3.add(new JLabel("0"));
+		//			tabellina4.add(new JLabel("0"));
+		//		}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 781, 840);
@@ -112,18 +117,29 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnAmbo1 = new JButton("Ambo");
 		btnAmbo1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),1,1,combo1.getSelectedIndex()+1);
-					if(response == false){
-						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+				//				while(occupato == true){
+				//					try {
+				//						Thread.sleep(500);
+				//					} catch (InterruptedException e1) {
+				//						// TODO Auto-generated catch block
+				//						e1.printStackTrace();
+				//					}
+				//				}
+				//				if(occupato == false){
+				//occupato = true;
+					try {
+						response = inviaVittoria(situazione.getNumeroPartita(),1,1,combo1.getSelectedIndex()+1);
+						if(response == false){
+							JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+						}
+					} catch (IOException | EccezioneUtente e1) {
+						System.out.print("impossibile ricevere una risposta dal server");
 					}
-					else{
-						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
-					}
-				} catch (IOException | EccezioneUtente e1) {
-					System.out.print("impossibile ricevere una risposta dal server");
+					//				}
 				}
-			}
 		});
 		btnAmbo1.setEnabled(false);
 		btnAmbo1.setBounds(12, 155, 75, 25);
@@ -559,18 +575,19 @@ public class TombolaGui extends JFrame implements Runnable{
 		lblNewLabel.setBounds(398, 227, 70, 15);
 		contentPane.add(lblNewLabel);
 
-		JLabel lblUltimoEstratto = new JLabel("ultimo estratto:");
-		lblUltimoEstratto.setBounds(522, 227, 117, 15);
+		JLabel lbl5 = new JLabel("ultimo estratto:");
+		lbl5.setBounds(522, 227, 117, 15);
+		contentPane.add(lbl5);
+
+		lblUltimoEstratto = new JLabel("");
+		lblUltimoEstratto.setBounds(645, 222, 70, 25);
 		contentPane.add(lblUltimoEstratto);
 
-		JLabel lblNewLabel_5 = new JLabel("");
-		lblNewLabel_5.setBounds(645, 222, 70, 25);
-		contentPane.add(lblNewLabel_5);
-
 		combo1 = new JComboBox();
+		combo1.setEnabled(false);
 		combo1.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				int n = combo1.getSelectedIndex() +1;
+				int n = combo1.getSelectedIndex();
 				aggiorna1(n);
 			}
 		});
@@ -587,6 +604,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		contentPane.add(label);
 
 		combo3 = new JComboBox();
+		combo3.setEnabled(false);
 		combo3.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
 		combo3.setBounds(311, 416, 53, 24);
 		contentPane.add(combo3);
@@ -596,6 +614,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		contentPane.add(label_1);
 
 		combo4 = new JComboBox();
+		combo4.setEnabled(false);
 		combo4.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
 		combo4.setBounds(311, 645, 53, 24);
 		contentPane.add(combo4);
@@ -605,6 +624,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		contentPane.add(label_2);
 
 		combo2 = new JComboBox();
+		combo2.setEnabled(false);
 		combo2.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
 		combo2.setBounds(692, 193, 53, 24);
 		contentPane.add(combo2);
@@ -649,36 +669,81 @@ public class TombolaGui extends JFrame implements Runnable{
 		lblPremioTombola.setBounds(686, 684, 70, 15);
 		contentPane.add(lblPremioTombola);
 
-		for(int i = 0;i< 27; i++){
-			pnlTabellina1.add(tabellina1.get(i));
-			pnlTabellina2.add(tabellina2.get(i));
-			pnlTabellina3.add(tabellina3.get(i));
-			pnlTabellina4.add(tabellina4.get(i));
+
+		//		for(int i = 0;i< 27; i++){
+		//			pnlTabellina1.add(tabellina1.get(i));
+		//			pnlTabellina2.add(tabellina2.get(i));
+		//			pnlTabellina3.add(tabellina3.get(i));
+		//			pnlTabellina4.add(tabellina4.get(i));
+		//		}
+
+		//		for(int i = 0; i< 90; i++){
+		//			pnlTabellone.add(new JLabel(""+(i+1)));
+		//		}
+
+		switch(numCartelle){
+		case 1:{
+			tabellina1 = new ArrayList<JLabel>();
+			System.out.println("tabellina1 creata");
+			combo1.setEnabled(true);
+			break;
+		}
+		case 2:{
+			tabellina1 = new ArrayList<JLabel>();
+			tabellina2 = new ArrayList<JLabel>();
+			combo1.setEnabled(true);
+			combo2.setEnabled(true);
+			break;
+		}
+		case 3:{
+			tabellina1 = new ArrayList<JLabel>();
+			tabellina2 = new ArrayList<JLabel>();
+			tabellina3 = new ArrayList<JLabel>();
+			combo1.setEnabled(true);
+			combo2.setEnabled(true);
+			combo3.setEnabled(true);
+			break;
+		}
+		case 4:{
+			tabellina1 = new ArrayList<JLabel>();
+			tabellina2 = new ArrayList<JLabel>();
+			tabellina3 = new ArrayList<JLabel>();
+			tabellina4 = new ArrayList<JLabel>();
+			combo1.setEnabled(true);
+			combo2.setEnabled(true);
+			combo3.setEnabled(true);
+			combo4.setEnabled(true);
+			break;
 		}
 
-		for(int i = 0; i< 90; i++){
-			pnlTabellone.add(new JLabel(""+(i+1)));
 		}
 	}
 
 	public void aggiorna1(int n){
+
 		int vincente[] = situazione.getTabella(0).getVincente();
-		if(vincente[n] == 2 && situazione.getPremiDisponibili()[0] == true)
+
+		System.out.println("vincenti tabela 1   "+vincente[0]+vincente[1]+vincente[2]);
+
+		if(vincente[n] == 2 && situazione.getPremiDisponibili()[0]){
+
 			btnAmbo1.setEnabled(true);
+			//System.out.println("qui in bottone da validare");
+		}
 		else 
 			btnAmbo1.setEnabled(false);
 
-		if(vincente[n] == 3 && situazione.getPremiDisponibili()[1] == true)
+		if(vincente[n] == 3 && situazione.getPremiDisponibili()[1])
 			btnTerna1.setEnabled(true);
 		else 
 			btnTerna1.setEnabled(false);
 
-		if(vincente[n] == 4 && situazione.getPremiDisponibili()[2] == true)
+		if(vincente[n] == 4 && situazione.getPremiDisponibili()[2])
 			btnQuaterna1.setEnabled(true);
 		else 
 			btnQuaterna1.setEnabled(false);
 
-		if(vincente[n] == 5 && situazione.getPremiDisponibili()[3] == true)
+		if(vincente[n] == 5 && situazione.getPremiDisponibili()[3])
 			btnCinquina1.setEnabled(true);
 		else 
 			btnCinquina1.setEnabled(false);
@@ -690,7 +755,7 @@ public class TombolaGui extends JFrame implements Runnable{
 			btnTombola1.setEnabled(true);
 		else 
 			btnTombola1.setEnabled(false);
-
+		revalidate();
 	}
 
 	public void aggiorna2(int n){
@@ -791,6 +856,15 @@ public class TombolaGui extends JFrame implements Runnable{
 
 	public boolean inviaVittoria(int numParita,int tipoVittoria,int indiceCartella, int indiceRiga) throws IOException, EccezioneUtente{
 		boolean response = false;
+		//		while(occupato == true){
+		//			try {
+		//				Thread.sleep(500);
+		//			} catch (InterruptedException e) {
+		//				System.out.println("impossibile effettuare la sleep");
+		//			}
+		//		}
+		//		if(occupato == false){
+		occupato = true;
 		if(comunicazione.getTipoCom()){
 			comunicazione.vintoTombolaSocket(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
 			response = comunicazione.riceviVintoTombola();
@@ -798,28 +872,39 @@ public class TombolaGui extends JFrame implements Runnable{
 		else{
 			response = comunicazione.vintoTombolaRmi(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
 		}
+		System.out.println("ho ricevuto la risposta del server ");
+		revalidate();
+
+		//		}
+		//		occupato = false;
 		return response;
 	}
 
 	public void aggiornaCartella(ArrayList<JLabel> tabellina, int indice){
-		for(int i = 0;i<3;i++)
-			for(int j=0;j<9;j++){
-				tabellina.set(i*j, new JLabel(""+situazione.getTabella(indice).getNumero(i, j)));
+		Tabella t = situazione.getTabella(indice);
+		for(int i = 0;i< Tabella.N_RIGHE;i++){
+			for(int j=0;j<Tabella.N_COLONNE;j++){
+				//System.out.print(t.isEstratto(i-1, j-1));
+				tabellina.add(new JLabel(""+t.getNumero(i, j)));
+				//tabellina.set(i*j, new JLabel(""+t.getNumero(i-1, j-1)));
 				if(situazione.getTabella(indice).isEstratto(i,j)){
-					tabellina.get(i).setBackground(Color.RED);
+					tabellina.get(i*9+j).setForeground(new Color(255, 0, 0));
 				}
 
 			}
+		}
 	}
 
 	public void aggiornaTabellone(){
 		Casella[][] c = situazione.getTabellone().getTabellone();
+
 		pnlTabellone.removeAll();
 		for(int i = 0 ; i< Tabellone.N_RIGHE; i++){
 			for(int j= 0; j< Tabellone.N_COLONNE; j++){
-				JLabel l = new JLabel(""+ c[i][j].getNumero());
+				String s = ""+ c[i][j].getNumero();
+				JLabel l = new JLabel(s);
 				if(c[i][j].isEstratto())
-					l.setBackground(Color.RED);
+					l.setForeground(new Color(255, 0, 0));
 				pnlTabellone.add(l);
 			}
 		}
@@ -827,38 +912,53 @@ public class TombolaGui extends JFrame implements Runnable{
 
 	public void run(){
 		while(true){
+
 			try {
-				Thread.sleep(2000);
-				if(comunicazione.getTipoCom()){
-					comunicazione.aggTombolaSocket();
-					situazione = comunicazione.riceviAggTombolaSocket();
-				}
-				else {
-					situazione = comunicazione.aggTombolarmi();
-				}
-			} catch (InterruptedException e) {
+				//				while(occupato == true){
+				//					Thread.sleep(1000);
+				//				}
+				//if(occupato == false){
+				//occupato = true;
+
+				//Thread.sleep(500);
+//				synchronized(lock){
+					System.out.println("Sto per richiedere aggiornamento dal server");
+					if(comunicazione.getTipoCom()){
+						comunicazione.aggTombolaSocket();
+						situazione = comunicazione.riceviAggTombolaSocket();
+					}
+					else {
+						situazione = comunicazione.aggTombolarmi();
+					}
+					//occupato = false;
+					System.out.println("ricevuto aggiornamento dal server");
+//				}
+			} catch (/*InterruptedException | */IOException e) {
 				// TODO Auto-generated catch block
-				System.out.println("impossibile fare la sleep");
+				System.out.println("impossibile aggiornare da server");
 				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("impossibile ricevere dal server l'aggiornamento tombola");
 			}
-			System.out.println("sto aggiornando il tabellone");
+
+			System.out.println("Suca");
 			aggiornaTabellone();
-			aggiorna1(combo1.getSelectedIndex());
-			aggiorna2(combo2.getSelectedIndex());
-			aggiorna3(combo3.getSelectedIndex());
-			aggiorna4(combo4.getSelectedIndex());
+			lblUltimoEstratto.setText(""+situazione.getUltimoEstratto());
+			System.out.println("@@@@ "+numCartelle);
 			switch(numCartelle){
 			case 1:{
+				aggiorna1(combo1.getSelectedIndex());
 				aggiornaCartella(tabellina1,0);
 				pnlTabellina1.removeAll();
-				for(int i = 0; i<27; i++)
+				for(int i = 0; i<27; i++){
 					pnlTabellina1.add(tabellina1.get(i));
+
+				}
+				//repaint();
+				revalidate();
 				break;
 			}
 			case 2:{
+				aggiorna1(combo1.getSelectedIndex());
+				aggiorna2(combo2.getSelectedIndex());
 				aggiornaCartella(tabellina1,0);
 				aggiornaCartella(tabellina2,1);pnlTabellina1.removeAll();
 				pnlTabellina2.removeAll();for(int i = 0; i<27; i++){
@@ -867,6 +967,9 @@ public class TombolaGui extends JFrame implements Runnable{
 				}
 				break;}
 			case 3:{
+				aggiorna1(combo1.getSelectedIndex());
+				aggiorna2(combo2.getSelectedIndex());
+				aggiorna3(combo3.getSelectedIndex());
 				aggiornaCartella(tabellina1,0);
 				aggiornaCartella(tabellina2,1);
 				aggiornaCartella(tabellina3,2);pnlTabellina1.removeAll();
@@ -879,6 +982,10 @@ public class TombolaGui extends JFrame implements Runnable{
 				break;
 			}
 			case 4:{
+				aggiorna1(combo1.getSelectedIndex());
+				aggiorna2(combo2.getSelectedIndex());
+				aggiorna3(combo3.getSelectedIndex());
+				aggiorna4(combo4.getSelectedIndex());
 				aggiornaCartella(tabellina1,0);
 				aggiornaCartella(tabellina2,1);
 				aggiornaCartella(tabellina3,2);
@@ -892,11 +999,15 @@ public class TombolaGui extends JFrame implements Runnable{
 					pnlTabellina2.add(tabellina2.get(i));
 					pnlTabellina3.add(tabellina3.get(i));
 					pnlTabellina4.add(tabellina4.get(i));
-				}break;
+				}
+				break;
 			}
+			default:
+				System.out.println("WTF?");
 			}
+			System.out.println("WTF?");
 		}
 	}
-}
 
+}
 
