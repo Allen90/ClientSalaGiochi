@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
+
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
@@ -13,10 +15,15 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+
 import javax.swing.JTextPane;
+
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import rubamazzo.Carta;
+import rubamazzo.Mossa;
 import rubamazzo.SituazioneRubamazzo;
 
 import comunicazione.Comunicazione;
@@ -31,30 +38,35 @@ public class RubamazzoGui extends JFrame {
 	private SituazioneRubamazzo situazione;
 
 	//panel dei bottini avversari
-	JPanel panelCarteAvversari;
+	private JPanel panelCarteAvversari;
 	private ArrayList<JLabel> labelCarteAvversari;
-	JPanel panelRadioAvversari;
+	private JPanel panelRadioAvversari;
 	private ArrayList<JRadioButton> radioCarteAvversari;
 
 	//panel del banco
-	JPanel panelCarteBanco;
+	private JPanel panelCarteBanco;
 	private ArrayList<JLabel> labelCarteBanco;
-	JPanel panelCheckBanco;
+	private JPanel panelCheckBanco;
 	private ArrayList<JCheckBox> checkCarteBanco;
 
 	//panel della propria mano
-	JPanel panelCarteMano;
+	private JPanel panelCarteMano;
 	private ArrayList<JLabel> labelCarteMano;
-	JPanel panelRadioMano;
+	private JPanel panelRadioMano;
 	private ArrayList<JRadioButton> radioCarteMano;
-	JPanel panelBottino;
-	JLabel labelBottino;
+	private JPanel panelBottino;
+	private JLabel labelBottino;
 
 	//pannelli bottone gioca e log 
-	JPanel panelBottoneGioco;
-	JButton buttonGioco;
+	private JPanel panelBottoneGioco;
+	private JButton buttonGioco;
 	JPanel panelLog;
-	JTextPane textPaneLog;
+	private JTextPane textPaneLog;
+	private Mossa mossa;
+	private Carta giocata;
+	private ArrayList<Carta> bersagli;
+	private int bersaglio = 0;
+	private boolean ok = false;
 
 	public RubamazzoGui(Comunicazione comunicazione, SituazioneRubamazzo situazione) {
 		this.comunicazione = comunicazione;
@@ -131,7 +143,7 @@ public class RubamazzoGui extends JFrame {
 		buttonGioco = new JButton("Gioca");
 		buttonGioco.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
+				gioca();
 			}
 		});
 		buttonGioco.setBounds(92, 65, 100, 100);
@@ -148,6 +160,17 @@ public class RubamazzoGui extends JFrame {
 		aggiornaTavolo();
 	}
 
+	private int getIndiceSelezionato(ArrayList<JRadioButton> gruppo){
+		int i = 0;
+		for(i=0; i<gruppo.size();i++){
+			if(gruppo.get(i).isSelected())
+				break;
+		}
+		if(i >= gruppo.size()) 
+			i = -1;
+		return i;
+	}
+	
 	public String getPath(Carta c){
 		return "/immaginiCarte/"+c.toString()+".png";
 	}
@@ -165,6 +188,7 @@ public class RubamazzoGui extends JFrame {
 		for(int i = 0; i < situazione.getBottini().size(); i++){
 			labelCarteAvversari.add(new JLabel());
 			labelCarteAvversari.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBottiniAltrui().get(i)))));
+			labelCarteAvversari.get(i).setToolTipText(situazione.getBottiniAltrui().get(i).toString());
 			panelCarteAvversari.add(labelCarteAvversari.get(i));
 		}
 
@@ -186,6 +210,7 @@ public class RubamazzoGui extends JFrame {
 		for(int i = 0; i < situazione.getBanco().size(); i++){
 			labelCarteBanco.add(new JLabel(""));
 			labelCarteBanco.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBanco().get(i)))));
+			labelCarteBanco.get(i).setToolTipText(situazione.getBanco().get(i).toString());
 			panelCarteBanco.add(labelCarteBanco.get(i));
 		}
 		panelCheckBanco.removeAll();
@@ -200,7 +225,8 @@ public class RubamazzoGui extends JFrame {
 		labelCarteMano.removeAll(labelCarteMano);
 		for(int i = 0; i < situazione.getMano().size(); i++){
 			labelCarteMano.add(new JLabel(""));
-			labelCarteMano.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBanco().get(i)))));
+			labelCarteMano.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getMano().get(i)))));
+			labelCarteMano.get(i).setToolTipText(situazione.getMano().get(i).toString());
 			panelCarteMano.add(labelCarteMano.get(i));
 		}
 
@@ -215,13 +241,17 @@ public class RubamazzoGui extends JFrame {
 			panelRadioMano.add(radioCarteMano.get(i));
 			bgMano.add(radioCarteMano.get(i));
 		}
-		if(situazione.getMioBottino() != null) 
+		if(situazione.getMioBottino() != null){
 			labelBottino.setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getMioBottino()))));
-		else 
+			labelBottino.setToolTipText(situazione.getMioBottino().toString());
+		}
+		else {
 			labelBottino.setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPathRetroVert())));
+			labelBottino.setToolTipText(null);
+		}
 		
 		//pannelli bottone gioca e log 
-
+		buttonGioco.setEnabled(situazione.getAbilitato());
 	}
 	
 	private int contaSelectBanco(){
@@ -234,7 +264,7 @@ public class RubamazzoGui extends JFrame {
 	
 	private int getTipoMossa(){
 		if(bgMano.getSelection() == null)
-			return -1;
+			return -2;
 		else if(contaSelectBanco() > 0 && bgCarteAvversari.getSelection() != null)
 			return -1;
 		else if(bgCarteAvversari.getSelection() == null){
@@ -248,5 +278,78 @@ public class RubamazzoGui extends JFrame {
 			}
 		}else
 			return 3;
+	}
+	
+	public void gioca(){
+
+		bersagli = new ArrayList<>();
+		giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
+		switch(getTipoMossa()){
+		case -2:
+			JOptionPane.showMessageDialog(null, "Scegli una carta da giocare");
+			break;
+		case -1: 
+			JOptionPane.showMessageDialog(null, "Scegli correttamente il bersaglio della mossa");
+			break;
+		case 0:
+			mossa = new Mossa(giocata);
+			break;
+		case 1:
+			for(int i = 0; i < situazione.getBanco().size(); i++)
+				if(checkCarteBanco.get(i).isSelected())
+					bersagli.add(new Carta(labelCarteBanco.get(i).getToolTipText()));
+			mossa = new Mossa(giocata, bersagli.get(0));
+			break;
+		case 2:
+			for(int i = 0; i < situazione.getBanco().size(); i++)
+				if(checkCarteBanco.get(i).isSelected())
+					bersagli.add(new Carta(labelCarteBanco.get(i).getToolTipText()));
+			mossa = new Mossa(giocata, bersagli);
+			break;
+		case 3:
+			bersaglio = getIndiceSelezionato(radioCarteAvversari);
+			mossa = new Mossa(giocata, bersaglio);
+			break;
+		}
+		
+		if(comunicazione.getTipoCom()){
+			comunicazione.mossaRubamazzoSocket(mossa, situazione.getPartita());
+			try {
+				ok = comunicazione.riceviMossaRubamazzo();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else
+			try {
+				ok =comunicazione.mossaRubamazzoRmi(mossa, situazione.getPartita());
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		if(!ok){
+			JOptionPane.showMessageDialog(null, "Mossa illegale");
+		}
+	}
+	
+	public void run(){
+		while(true){
+			try {
+				Thread.sleep(2000);
+				if(comunicazione.getTipoCom()){
+					comunicazione.aggTombolaSocket();
+					situazione = comunicazione.riceviAggRubamazzoSocket();
+
+				}
+				else {
+					situazione = comunicazione.aggRubamazzoRmi();
+				}
+			} catch (InterruptedException e) {
+				System.out.println("impossibile fare la sleep");
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("impossibile ricevere dal server l'aggiornamento tombola");
+				e.printStackTrace();
+			}
+			aggiornaTavolo();
+		}
 	}
 }
