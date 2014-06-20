@@ -28,7 +28,7 @@ import rubamazzo.SituazioneRubamazzo;
 
 import comunicazione.Comunicazione;
 
-public class RubamazzoGui extends JFrame {
+public class RubamazzoGui extends JFrame implements Runnable{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -42,12 +42,14 @@ public class RubamazzoGui extends JFrame {
 	private ArrayList<JLabel> labelCarteAvversari;
 	private JPanel panelRadioAvversari;
 	private ArrayList<JRadioButton> radioCarteAvversari;
+	int avversarioSel;
 
 	//panel del banco
 	private JPanel panelCarteBanco;
 	private ArrayList<JLabel> labelCarteBanco;
 	private JPanel panelCheckBanco;
 	private ArrayList<JCheckBox> checkCarteBanco;
+	ArrayList<Boolean> bancoSel;
 
 	//panel della propria mano
 	private JPanel panelCarteMano;
@@ -56,6 +58,7 @@ public class RubamazzoGui extends JFrame {
 	private ArrayList<JRadioButton> radioCarteMano;
 	private JPanel panelBottino;
 	private JLabel labelBottino;
+	int manoSel;
 
 	//pannelli bottone gioca e log 
 	private JPanel panelBottoneGioco;
@@ -67,12 +70,15 @@ public class RubamazzoGui extends JFrame {
 	private ArrayList<Carta> bersagli;
 	private int bersaglio = 0;
 	private boolean ok = false;
+	private JLabel labelTurno;
+
 
 	public RubamazzoGui(Comunicazione comunicazione, SituazioneRubamazzo situazione) {
+		
+		System.out.println("Creo la gui");
+		
 		this.comunicazione = comunicazione;
 		this.situazione = situazione;
-
-
 
 		setResizable(false);
 		setTitle("Rubamazzo");
@@ -97,7 +103,6 @@ public class RubamazzoGui extends JFrame {
 		contentPane.add(panelRadioAvversari);
 		panelRadioAvversari.setLayout(new GridLayout(1, situazione.getBottini().size(), 0, 0));
 
-
 		//panel del banco
 		labelCarteBanco = new ArrayList<>();
 		panelCarteBanco = new JPanel();
@@ -111,6 +116,7 @@ public class RubamazzoGui extends JFrame {
 		contentPane.add(panelCheckBanco);
 		panelCheckBanco.setLayout(new GridLayout(1, situazione.getBanco().size(), 0, 0));
 
+		bancoSel = new ArrayList<>();
 
 		//panel della propria mano
 		labelCarteMano = new ArrayList<>();
@@ -148,6 +154,11 @@ public class RubamazzoGui extends JFrame {
 		});
 		buttonGioco.setBounds(92, 65, 100, 100);
 		panelBottoneGioco.add(buttonGioco);
+		
+		labelTurno = new JLabel("");
+		labelTurno.setHorizontalAlignment(SwingConstants.CENTER);
+		labelTurno.setBounds(124, 215, 46, 14);
+		panelBottoneGioco.add(labelTurno);
 
 		panelLog = new JPanel();
 		panelLog.setBounds(700, 0, 294, 230);
@@ -157,7 +168,9 @@ public class RubamazzoGui extends JFrame {
 		textPaneLog = new JTextPane();
 		panelLog.add(textPaneLog);
 		
+		System.out.println("gui creata, aggiorno il tavolo");
 		aggiornaTavolo();
+		System.out.println("tavolo aggiornato");
 	}
 
 	private int getIndiceSelezionato(ArrayList<JRadioButton> gruppo){
@@ -180,65 +193,93 @@ public class RubamazzoGui extends JFrame {
 	}
 	
 	public void aggiornaTavolo(){
+		
 		//panel dei bottini avversari
 		JRadioButton temp;
+	
+		avversarioSel = getIndiceSelezionato(radioCarteAvversari);
 		
-		panelCarteAvversari.removeAll();
-		labelCarteAvversari.removeAll(labelCarteAvversari);
-		for(int i = 0; i < situazione.getBottini().size(); i++){
+		panelCarteAvversari.removeAll();							
+		
+		labelCarteAvversari.removeAll(labelCarteAvversari);		
+		
+		for(int i = 0; i < situazione.getBottiniAltrui().size(); i++){	
 			labelCarteAvversari.add(new JLabel());
 			labelCarteAvversari.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBottiniAltrui().get(i)))));
 			labelCarteAvversari.get(i).setToolTipText(situazione.getBottiniAltrui().get(i).toString());
-			panelCarteAvversari.add(labelCarteAvversari.get(i));
+			labelCarteAvversari.get(i).setHorizontalAlignment(SwingConstants.CENTER);
+			panelCarteAvversari.add(labelCarteAvversari.get(i));	
 		}
 
 		panelRadioAvversari.removeAll();
-		for(int i = 0; i < situazione.getBottini().size(); i++){
+		
+		for(int i = 0; i < radioCarteAvversari.size(); i++){
 			bgCarteAvversari.remove(radioCarteAvversari.get(i));
 		}
 		radioCarteAvversari.removeAll(radioCarteAvversari);	
-		for(int i = 0; i < situazione.getBottini().size(); i++){
+		
+		for(int i = 0; i < situazione.getBottiniAltrui().size(); i++){
 			temp = new JRadioButton("");
 			radioCarteAvversari.add(temp);
 			panelRadioAvversari.add(radioCarteAvversari.get(i));
+			radioCarteAvversari.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			bgCarteAvversari.add(radioCarteAvversari.get(i));
 		}
-
+		
 		//panel del banco
+		
+		for(JCheckBox cb: checkCarteBanco)
+			bancoSel.add(new Boolean(cb.isSelected()));
+		
 		panelCarteBanco.removeAll();
+		
 		labelCarteBanco.removeAll(labelCarteBanco);
+		
 		for(int i = 0; i < situazione.getBanco().size(); i++){
 			labelCarteBanco.add(new JLabel(""));
 			labelCarteBanco.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBanco().get(i)))));
 			labelCarteBanco.get(i).setToolTipText(situazione.getBanco().get(i).toString());
+			labelCarteBanco.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			panelCarteBanco.add(labelCarteBanco.get(i));
 		}
+		
 		panelCheckBanco.removeAll();
+		
 		checkCarteBanco.removeAll(checkCarteBanco);	
+		
 		for(int i = 0; i < situazione.getBanco().size(); i++){
 			checkCarteBanco.add(new JCheckBox(""));
 			panelCheckBanco.add(checkCarteBanco.get(i));
+			checkCarteBanco.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 		}
-
+		
 		//panel della propria mano
 		panelCarteMano.removeAll();
+
+		manoSel = getIndiceSelezionato(radioCarteMano);
+		
 		labelCarteMano.removeAll(labelCarteMano);
+		
 		for(int i = 0; i < situazione.getMano().size(); i++){
 			labelCarteMano.add(new JLabel(""));
 			labelCarteMano.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getMano().get(i)))));
 			labelCarteMano.get(i).setToolTipText(situazione.getMano().get(i).toString());
+			labelCarteMano.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			panelCarteMano.add(labelCarteMano.get(i));
 		}
 
 		panelRadioMano.removeAll();
-		for(int i = 0; i < situazione.getMano().size(); i++){
+		
+		for(int i = 0; i < radioCarteMano.size(); i++){
 			bgMano.remove(radioCarteMano.get(i));
 		}
 		radioCarteMano.removeAll(radioCarteMano);	
+		
 		for(int i = 0; i < situazione.getMano().size(); i++){
 			temp = new JRadioButton("");
 			radioCarteMano.add(temp);
 			panelRadioMano.add(radioCarteMano.get(i));
+			radioCarteMano.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			bgMano.add(radioCarteMano.get(i));
 		}
 		if(situazione.getMioBottino() != null){
@@ -252,6 +293,19 @@ public class RubamazzoGui extends JFrame {
 		
 		//pannelli bottone gioca e log 
 		buttonGioco.setEnabled(situazione.getAbilitato());
+		labelTurno = new JLabel();
+		if(situazione.getAbilitato())
+			labelTurno.setText("E' il tuo turno!");
+		else 
+			labelTurno.setText("Tocca i tuoi avversari");
+		
+		//refresh
+		
+		for(int i = 0; i < checkCarteBanco.size(); i++)
+			checkCarteBanco.get(i).setEnabled(bancoSel.get(i));
+		setSelRadio(manoSel, avversarioSel);
+		
+		revalidate();
 	}
 	
 	private int contaSelectBanco(){
@@ -278,6 +332,21 @@ public class RubamazzoGui extends JFrame {
 			}
 		}else
 			return 3;
+	}
+
+	public void setSelRadio(int mano, int avversari){
+		for(int i = 0; i < radioCarteMano.size(); i++){
+			if(i == mano)
+				radioCarteMano.get(i).setSelected(true);
+			else 
+				radioCarteMano.get(i).setSelected(false);
+		}
+		for(int i = 0; i < radioCarteAvversari.size(); i++){
+			if(i == avversari)
+				radioCarteAvversari.get(i).setSelected(true);
+			else 
+				radioCarteAvversari.get(i).setSelected(false);
+		}
 	}
 	
 	public void gioca(){
@@ -335,9 +404,11 @@ public class RubamazzoGui extends JFrame {
 			try {
 				Thread.sleep(2000);
 				if(comunicazione.getTipoCom()){
-					comunicazione.aggTombolaSocket();
+					System.out.println("sto per mandare la richiesta di aggiornamento");
+					comunicazione.aggRubamazzoSocket();
+					System.out.println("richiesta di aggiornamento mandata");
 					situazione = comunicazione.riceviAggRubamazzoSocket();
-
+					System.out.println("aggiornamento ricevuto");
 				}
 				else {
 					situazione = comunicazione.aggRubamazzoRmi();
@@ -346,10 +417,12 @@ public class RubamazzoGui extends JFrame {
 				System.out.println("impossibile fare la sleep");
 				e.printStackTrace();
 			} catch (IOException e) {
-				System.out.println("impossibile ricevere dal server l'aggiornamento tombola");
+				System.out.println("impossibile ricevere dal server l'aggiornamento rubamazzo");
 				e.printStackTrace();
 			}
+			System.out.println("sto per aggiornare il tavolo");
 			aggiornaTavolo();
+			System.out.println("tavolo aggiornato");
 		}
 	}
 }
