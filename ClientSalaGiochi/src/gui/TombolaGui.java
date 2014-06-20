@@ -22,6 +22,7 @@ import tombola.SituazioneTombola;
 import tombola.Tabella;
 import tombola.Tabellone;
 import comunicazione.Comunicazione;
+import comunicazione.InvioVittorieTombola;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -79,7 +80,7 @@ public class TombolaGui extends JFrame implements Runnable{
 	private JPanel pnlTabellone;
 	private JLabel lblUltimoEstratto;
 	private Object lock;
-	private InvioVittorie
+	private InvioVittorieTombola vittorie;
 	/**
 	 * Create the frame.
 	 */
@@ -87,9 +88,10 @@ public class TombolaGui extends JFrame implements Runnable{
 
 
 	public TombolaGui(int numCartelle, SituazioneTombola situzione,Comunicazione comunicazione) {
-		
-		
-		
+		response = false;
+		vittorie = new InvioVittorieTombola(comunicazione);
+		Thread t = new Thread(vittorie);
+		t.start();
 		this.situazione = situazione;
 		this.numCartelle = numCartelle;
 		this.comunicazione = comunicazione;
@@ -117,29 +119,18 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnAmbo1 = new JButton("Ambo");
 		btnAmbo1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//				while(occupato == true){
-				//					try {
-				//						Thread.sleep(500);
-				//					} catch (InterruptedException e1) {
-				//						// TODO Auto-generated catch block
-				//						e1.printStackTrace();
-				//					}
-				//				}
-				//				if(occupato == false){
-				//occupato = true;
-					try {
-						response = inviaVittoria(situazione.getNumeroPartita(),1,1,combo1.getSelectedIndex()+1);
-						if(response == false){
-							JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
-						}
-						else{
-							JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
-						}
-					} catch (IOException | EccezioneUtente e1) {
-						System.out.print("impossibile ricevere una risposta dal server");
+				try {
+					response = inviaVittoria(situazione.getNumeroPartita(),1,0,combo1.getSelectedIndex());
+					if(response == false){
+						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
-					//				}
+					else{
+						JOptionPane.showMessageDialog(null, "Sei riuscito a conquistare il premio!");
+					}
+				} catch (IOException | EccezioneUtente e1) {
+					System.out.print("impossibile ricevere una risposta dal server");
 				}
+			}
 		});
 		btnAmbo1.setEnabled(false);
 		btnAmbo1.setBounds(12, 155, 75, 25);
@@ -149,7 +140,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTerna1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),2,1,combo1.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),2,0,combo1.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -169,7 +160,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnQuaterna1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),3,1,combo1.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),3,0,combo1.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -190,7 +181,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnCinquina1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),4,1,combo1.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),4,0,combo1.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -211,7 +202,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTombola1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),5,1,combo1.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),5,0,combo1.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -239,7 +230,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnAmbo3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),1,3,combo3.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),1,2,combo3.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -260,7 +251,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTerna3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),2,3,combo3.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),2,2,combo3.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -281,7 +272,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnQuaterna3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),3,3,combo3.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),3,2,combo3.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -302,7 +293,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnCinquina3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),3,4,combo3.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),4,2,combo3.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -323,7 +314,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTombola3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),5,3,combo3.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),5,2,combo3.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -352,7 +343,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnAmbo4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),1,4,combo4.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),1,3,combo4.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -373,7 +364,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTerna4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),2,4,combo4.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),2,3,combo4.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -394,7 +385,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnQuaterna4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),3,4,combo4.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),3,3,combo4.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -415,7 +406,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnCinquina4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),4,1,combo4.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),4,3,combo4.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -436,7 +427,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTombola4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),5,4,combo4.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),5,3,combo4.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -464,7 +455,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnAmbo2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),1,2,combo2.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),1,1,combo2.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -485,7 +476,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTerna2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),2,2,combo2.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),2,1,combo2.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -506,7 +497,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnQuaterna2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),3,2,combo2.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),3,1,combo2.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -527,7 +518,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnCinquina2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),4,2,combo2.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),4,1,combo2.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -548,7 +539,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		btnTombola2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					response = inviaVittoria(situazione.getNumeroPartita(),5,2,combo2.getSelectedIndex()+1);
+					response = inviaVittoria(situazione.getNumeroPartita(),5,1,combo2.getSelectedIndex());
 					if(response == false){
 						JOptionPane.showMessageDialog(null, "Sei stato troppo lento, un altro giocatore si è aggiudicato il premio!");
 					}
@@ -854,30 +845,19 @@ public class TombolaGui extends JFrame implements Runnable{
 	}
 
 
-	public boolean inviaVittoria(int numParita,int tipoVittoria,int indiceCartella, int indiceRiga) throws IOException, EccezioneUtente{
-		boolean response = false;
-		//		while(occupato == true){
-		//			try {
-		//				Thread.sleep(500);
-		//			} catch (InterruptedException e) {
-		//				System.out.println("impossibile effettuare la sleep");
-		//			}
-		//		}
-		//		if(occupato == false){
-		occupato = true;
-		if(comunicazione.getTipoCom()){
-			comunicazione.vintoTombolaSocket(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
-			response = comunicazione.riceviVintoTombola();
-		}
-		else{
-			response = comunicazione.vintoTombolaRmi(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
-		}
-		System.out.println("ho ricevuto la risposta del server ");
-		revalidate();
-
-		//		}
-		//		occupato = false;
-		return response;
+	public boolean inviaVittoria(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga) throws IOException, EccezioneUtente{
+		boolean ok = false;
+//		occupato = true;
+//		if(comunicazione.getTipoCom()){
+//			comunicazione.vintoTombolaSocket(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
+//			response = comunicazione.riceviVintoTombola();
+//		}
+//		else{
+//			response = comunicazione.vintoTombolaRmi(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
+//		}
+//		System.out.println("ho ricevuto la risposta del server ");
+		ok = vittorie.invio(numPartita, tipoVittoria, indiceCartella, indiceRiga);
+		return ok;
 	}
 
 	public void aggiornaCartella(ArrayList<JLabel> tabellina, int indice){
@@ -921,18 +901,22 @@ public class TombolaGui extends JFrame implements Runnable{
 				//occupato = true;
 
 				//Thread.sleep(500);
-//				synchronized(lock){
-					System.out.println("Sto per richiedere aggiornamento dal server");
-					if(comunicazione.getTipoCom()){
-						comunicazione.aggTombolaSocket();
-						situazione = comunicazione.riceviAggTombolaSocket();
-					}
-					else {
-						situazione = comunicazione.aggTombolarmi();
-					}
-					//occupato = false;
-					System.out.println("ricevuto aggiornamento dal server");
-//				}
+				//				synchronized(lock){
+				System.out.println("Sto per richiedere aggiornamento dal server");
+				if(comunicazione.getTipoCom()){
+					System.out.println("sto per inviare la richiesta socket aggiornamento");
+					comunicazione.aggTombolaSocket();
+					System.out.println("richiesto inviata");
+					System.out.println("Sto per ricevere aggiornamento");
+					situazione = comunicazione.riceviAggTombolaSocket();
+					System.out.println("aggiornamento ricevuto");
+				}
+				else {
+					situazione = comunicazione.aggTombolarmi();
+				}
+				//occupato = false;
+				System.out.println("ricevuto aggiornamento dal server");
+				//				}
 			} catch (/*InterruptedException | */IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println("impossibile aggiornare da server");
