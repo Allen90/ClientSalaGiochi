@@ -25,10 +25,13 @@ import rubamazzo.SituazioneRubamazzo;
 import slot.Slot;
 import tombola.SituazioneTombola;
 import userModel.EntryClassifica;
+import userModel.InfoHome;
 import userModel.Utente;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.SwingConstants;
 
@@ -53,7 +56,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 	private SituazioneTombola situazioneTomb;
 	private SituazioneRubamazzo situazioneRuba;
 	private JButton btnRubamazzo;
-	//costruire oggetto entry list
+	private InfoHome ih;
 
 	/**
 	 * Create the frame.
@@ -63,7 +66,19 @@ public class FramePrincipale extends JFrame implements Runnable{
 	public FramePrincipale(String username,int crediti,Comunicazione comunicazione) throws IOException, EccezioneClassificaVuota {
 		this.comunicazione = comunicazione;
 		this.crediti = crediti;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent evt) {
+				try {
+					logout();
+				} catch (IOException | EccezioneUtente e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -133,6 +148,15 @@ public class FramePrincipale extends JFrame implements Runnable{
 		pnlHome.add(comboTombola);
 
 		JButton btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					logout();
+				} catch (IOException | EccezioneUtente e1) {
+					System.out.println("impossibile effettuare il logout");
+				}
+			}
+		});
 		btnLogout.setBounds(314, 207, 117, 25);
 		pnlHome.add(btnLogout);
 
@@ -184,6 +208,22 @@ public class FramePrincipale extends JFrame implements Runnable{
 
 	}
 
+
+	public void logout() throws IOException, EccezioneUtente{
+		boolean ok;
+		if(comunicazione.getTipoCom()){
+			comunicazione.logoutSocket();
+			ok = comunicazione.riceviLogoutSocket();
+		}
+		else{
+			ok = comunicazione.logoutRmi();
+		}
+		if(ok){
+			System.exit(0);
+		}
+	}
+
+
 	public void attivaSlot(){
 		slot = new SlotGui(comunicazione,crediti);
 		slot.setVisible(true);
@@ -192,7 +232,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 	public void attivaTombola() throws HeadlessException, InterruptedException{
 		boolean ok = false;
 		int numCartelle = comboTombola.getSelectedIndex()+1;
-		
+
 		if(comunicazione.getTipoCom()){
 			comunicazione.giocoTombolaSocket(numCartelle);
 			try {
@@ -227,7 +267,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 				}
 				if(comunicazione.getTipoCom())
 				{
-					
+
 					try {
 						comunicazione.aggTombolaSocket();
 						situazioneTomb = comunicazione.riceviAggTombolaSocket();
@@ -255,7 +295,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 
 	public void attivaRubamazzo(){
 		boolean ok = false;
-		
+
 		if(comunicazione.getTipoCom()){
 			comunicazione.giocoRubamazzoSocket();
 			try {
@@ -292,8 +332,24 @@ public class FramePrincipale extends JFrame implements Runnable{
 				} catch (InterruptedException e) {
 					System.out.print("impossibile eseguire sleep richiesta");
 				}
-				
-				
+				if(comunicazione.getTipoCom())
+				{
+
+					try {
+						comunicazione.aggTombolaSocket();
+						situazioneTomb = comunicazione.riceviAggTombolaSocket();
+					} catch (IOException e) {
+						System.out.println("impossibile inviare richiesta di gioco tombola");
+					}
+				}
+				else{
+					try {
+						situazioneTomb = comunicazione.aggTombolarmi();
+					} catch (RemoteException e) {
+						System.out.println("impossibile inviare richiesta di gioco tombola");
+					}
+				}
+
 			}
 			rubamazzo = new RubamazzoGui(comunicazione, situazioneRuba);
 			Thread t = new Thread(rubamazzo);
@@ -322,7 +378,8 @@ public class FramePrincipale extends JFrame implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+//				comunicazione.aggInfoHomeSocket();
+//				ih = comunicazione.riceviInfoHomeSocket();
 			}
 			else{
 				try {

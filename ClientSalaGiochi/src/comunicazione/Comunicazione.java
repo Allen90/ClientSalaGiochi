@@ -212,5 +212,18 @@ public class Comunicazione {
 		String s = reader.readLine();
 		return Decoder.clientResponseMossaRubamazzo(s);
 	}
+	
+	public void logoutSocket(){
+		writer.println(Encoder.clientLogout);
+	}
+	
+	public boolean riceviLogoutSocket() throws IOException{
+		String s = reader.readLine();
+		return Decoder.clientResponseLogout(s);
+	}
+	
+	public boolean logoutRmi() throws RemoteException, EccezioneUtente{
+		return server.logout();
+	}
 
 }

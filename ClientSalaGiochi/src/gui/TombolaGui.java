@@ -39,7 +39,6 @@ import java.awt.Color;
 import javax.swing.JTextField;
 
 public class TombolaGui extends JFrame implements Runnable{
-	private boolean occupato;
 	private JPanel contentPane;
 	private ArrayList<JLabel> tabellina1;
 	private ArrayList<JLabel> tabellina2;
@@ -79,8 +78,8 @@ public class TombolaGui extends JFrame implements Runnable{
 	private int numCartelle;
 	private JPanel pnlTabellone;
 	private JLabel lblUltimoEstratto;
-	private Object lock;
 	private InvioVittorieTombola vittorie;
+	private boolean continua;
 	/**
 	 * Create the frame.
 	 */
@@ -88,6 +87,7 @@ public class TombolaGui extends JFrame implements Runnable{
 
 
 	public TombolaGui(int numCartelle, SituazioneTombola situzione,Comunicazione comunicazione) {
+		continua = true;
 		response = false;
 		vittorie = new InvioVittorieTombola(comunicazione);
 		Thread t = new Thread(vittorie);
@@ -95,14 +95,6 @@ public class TombolaGui extends JFrame implements Runnable{
 		this.situazione = situazione;
 		this.numCartelle = numCartelle;
 		this.comunicazione = comunicazione;
-
-		//		for(int i = 0;i<27;i++){
-		//			tabellina1.add(new JLabel("0"));
-		//			tabellina2.add(new JLabel("0"));
-		//			tabellina3.add(new JLabel("0"));
-		//			tabellina4.add(new JLabel("0"));
-		//		}
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 781, 840);
 		contentPane = new JPanel();
@@ -847,15 +839,15 @@ public class TombolaGui extends JFrame implements Runnable{
 
 	public boolean inviaVittoria(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga) throws IOException, EccezioneUtente{
 		boolean ok = false;
-//		occupato = true;
-//		if(comunicazione.getTipoCom()){
-//			comunicazione.vintoTombolaSocket(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
-//			response = comunicazione.riceviVintoTombola();
-//		}
-//		else{
-//			response = comunicazione.vintoTombolaRmi(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
-//		}
-//		System.out.println("ho ricevuto la risposta del server ");
+		//		occupato = true;
+		//		if(comunicazione.getTipoCom()){
+		//			comunicazione.vintoTombolaSocket(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
+		//			response = comunicazione.riceviVintoTombola();
+		//		}
+		//		else{
+		//			response = comunicazione.vintoTombolaRmi(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
+		//		}
+		//		System.out.println("ho ricevuto la risposta del server ");
 		ok = vittorie.invio(numPartita, tipoVittoria, indiceCartella, indiceRiga);
 		return ok;
 	}
@@ -890,18 +882,22 @@ public class TombolaGui extends JFrame implements Runnable{
 		}
 	}
 
+
+	public void teminato(){
+		int conta = 0;
+		for(int i = 0;i< situazione.getPremiDisponibili().length; i++){
+			if(situazione.getPremiDisponibili()[i] == false){
+				conta ++;
+			}
+		}
+		if(conta == 5 && situazione.getTabellone().terminato())
+			continua = false;
+	}
+
 	public void run(){
-		while(true){
-
+		while(continua){
 			try {
-				//				while(occupato == true){
-				//					Thread.sleep(1000);
-				//				}
-				//if(occupato == false){
-				//occupato = true;
-
-				//Thread.sleep(500);
-				//				synchronized(lock){
+				Thread.sleep(500);
 				System.out.println("Sto per richiedere aggiornamento dal server");
 				if(comunicazione.getTipoCom()){
 					System.out.println("sto per inviare la richiesta socket aggiornamento");
@@ -914,13 +910,9 @@ public class TombolaGui extends JFrame implements Runnable{
 				else {
 					situazione = comunicazione.aggTombolarmi();
 				}
-				//occupato = false;
 				System.out.println("ricevuto aggiornamento dal server");
-				//				}
-			} catch (/*InterruptedException | */IOException e) {
-				// TODO Auto-generated catch block
+			} catch (IOException | InterruptedException e) {
 				System.out.println("impossibile aggiornare da server");
-				e.printStackTrace();
 			}
 
 			System.out.println("Suca");
@@ -936,7 +928,6 @@ public class TombolaGui extends JFrame implements Runnable{
 					pnlTabellina1.add(tabellina1.get(i));
 
 				}
-				//repaint();
 				revalidate();
 				break;
 			}
@@ -949,6 +940,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					pnlTabellina1.add(tabellina1.get(i));
 					pnlTabellina2.add(tabellina2.get(i));
 				}
+				revalidate();
 				break;}
 			case 3:{
 				aggiorna1(combo1.getSelectedIndex());
@@ -963,6 +955,7 @@ public class TombolaGui extends JFrame implements Runnable{
 					pnlTabellina2.add(tabellina2.get(i));
 					pnlTabellina3.add(tabellina3.get(i));
 				}
+				revalidate();
 				break;
 			}
 			case 4:{
@@ -984,12 +977,10 @@ public class TombolaGui extends JFrame implements Runnable{
 					pnlTabellina3.add(tabellina3.get(i));
 					pnlTabellina4.add(tabellina4.get(i));
 				}
+				revalidate();
 				break;
 			}
-			default:
-				System.out.println("WTF?");
 			}
-			System.out.println("WTF?");
 		}
 	}
 
