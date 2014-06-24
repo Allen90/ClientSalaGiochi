@@ -205,12 +205,8 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			avversarioSel = getIndiceSelezionato(radioCarteAvversari);
 		
 		labelCarteAvversari.removeAll(labelCarteAvversari);	
-		
-		System.out.println("CARTE BOTTINI ALTRUI");
+		;
 		for(int i = 0; i < situazione.getBottiniAltrui().size(); i++){	
-			
-			System.out.println(situazione.getBottiniAltrui().get(i).toString());
-
 			labelCarteAvversari.add(new JLabel());
 			labelCarteAvversari.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBottiniAltrui().get(i)))));
 			labelCarteAvversari.get(i).setToolTipText(situazione.getBottiniAltrui().get(i).toString());
@@ -328,6 +324,10 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			}
 			setSelRadio(manoSel, avversarioSel);
 		}
+		System.out.println("MIO INDICE: " + situazione.getMioIndice());
+		System.out.println("NUMERO GIOCATORI DA BOTTINI: "+situazione.getBottini().size());
+		System.out.println("NUMERO GIOCATORI DA BOTTINI ALTRUI: "+situazione.getBottiniAltrui().size());
+		System.out.println("MIO BOTTINO: "+ situazione.getMioBottino());
 		primoAvvio = false;
 		revalidate();
 	}
@@ -435,18 +435,18 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		} catch (EccezioneUtente e) {
 			e.printStackTrace();
 		}
-		try {
-			if(comunicazione.getTipoCom()){
-				comunicazione.aggRubamazzoSocket();
-				situazione = comunicazione.riceviAggRubamazzoSocket();
-			}
-			else {
-				situazione = comunicazione.aggRubamazzoRmi();
-			}
-		} catch (IOException e) {
-			System.out.println("impossibile ricevere dal server l'aggiornamento rubamazzo");
-			e.printStackTrace();
-		}
+//		try {
+//			if(comunicazione.getTipoCom()){
+//				comunicazione.aggRubamazzoSocket();
+//				situazione = comunicazione.riceviAggRubamazzoSocket();
+//			}
+//			else {
+//				situazione = comunicazione.aggRubamazzoRmi();
+//			}
+//		} catch (IOException e) {
+//			System.out.println("impossibile ricevere dal server l'aggiornamento rubamazzo");
+//			e.printStackTrace();
+//		}
 		if(ok){
 			resetSelCheck();
 			resetSelRadio();

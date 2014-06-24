@@ -323,7 +323,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 				}
 
 			} catch (RemoteException | EccezioneUtente e) {
-				System.out.println("impossibile inviare richiesta di gioco tombola");
+				System.out.println("impossibile inviare richiesta di gioco Rubamazzo");
 			}
 		}
 		if(ok){
@@ -343,17 +343,17 @@ public class FramePrincipale extends JFrame implements Runnable{
 				{
 
 					try {
-						comunicazione.aggTombolaSocket();
-						situazioneTomb = comunicazione.riceviAggTombolaSocket();
+						comunicazione.aggRubamazzoSocket();
+						situazioneRuba = comunicazione.riceviAggRubamazzoSocket();
 					} catch (IOException e) {
-						System.out.println("impossibile inviare richiesta di gioco tombola");
+						System.out.println("impossibile inviare richiesta di gioco Rubamazzo");
 					}
 				}
 				else{
 					try {
-						situazioneTomb = comunicazione.aggTombolarmi();
+						situazioneRuba = comunicazione.aggRubamazzoRmi();
 					} catch (RemoteException e) {
-						System.out.println("impossibile inviare richiesta di gioco tombola");
+						System.out.println("impossibile inviare richiesta di gioco Rubamazzo");
 					}
 				}
 
@@ -364,7 +364,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 			rubamazzo.setVisible(true);
 		}
 		else
-			JOptionPane.showMessageDialog(null, "crediti insufficienti per giocare a tombola");
+			JOptionPane.showMessageDialog(null, "crediti insufficienti per giocare a Rubamazzo");
 	}
 
 	public void run(){

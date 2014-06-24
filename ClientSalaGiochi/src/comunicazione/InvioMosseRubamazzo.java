@@ -21,11 +21,8 @@ public class InvioMosseRubamazzo implements Runnable{
 		boolean ok;
 		if(comunicazione.getTipoCom())
 		{
-			System.out.println("sto per mandare la mossa socket");
 			comunicazione.mossaRubamazzoSocket(m, numPartita);
-			System.out.println("mossa socket inviata");
 			ok = comunicazione.riceviMossaRubamazzo();
-			System.out.println("ricevuto response dal server: "+ok);
 		}
 		else {
 			ok = comunicazione.mossaRubamazzoRmi(m, numPartita);
