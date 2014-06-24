@@ -228,5 +228,15 @@ public class Comunicazione {
 	public boolean logoutRmi() throws RemoteException, EccezioneUtente{
 		return server.logout();
 	}
+	
+	public void getInfoHomeSocket(){
+		writer.append(Encoder.clientGetInfoHome);
+	}
+	
+	public InfoHome riceviInfoHome(){
+		String s = reader.readLine();
+		return Decoder.clientInfoHome(s);
+	}
+	
 
 }

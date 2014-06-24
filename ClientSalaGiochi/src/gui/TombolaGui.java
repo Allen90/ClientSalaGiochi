@@ -999,6 +999,7 @@ public class TombolaGui extends JFrame implements Runnable{
 			}
 			}
 		}
+		JOptionPane.showMessageDialog(null, "La partita è finita!");
 	}
 
 }

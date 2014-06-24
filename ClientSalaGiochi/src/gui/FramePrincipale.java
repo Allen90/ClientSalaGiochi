@@ -370,7 +370,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 	public void run(){
 		while(finito == false){
 			try {
-				Thread.sleep(20000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -385,8 +385,6 @@ public class FramePrincipale extends JFrame implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-//				comunicazione.aggInfoHomeSocket();
-//				ih = comunicazione.riceviInfoHomeSocket();
 			}
 			else{
 				try {
@@ -398,7 +396,21 @@ public class FramePrincipale extends JFrame implements Runnable{
 				}
 
 			}
-
+			
+			if(comunicazione.getTipoCom()){
+				comunicazione.getInfoHomeSocket();
+				ih = comunicazione.riceviInfoHome();
+			}
+			else{
+				try {
+					ih = comunicazione.getInfoHome();
+				} catch (RemoteException | EccezioneUtente e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			
 			areaGlobale.removeAll();
 			areaGiornaliera.removeAll();
 			for(int i = 0;i< classGlob.size();i++){
