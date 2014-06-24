@@ -63,7 +63,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 	 * @throws IOException 
 	 * @throws EccezioneClassificaVuota 
 	 */
-	public FramePrincipale(String username,int crediti,Comunicazione comunicazione) throws IOException, EccezioneClassificaVuota {
+	public FramePrincipale(String username,int crediti,Comunicazione comunicazione) throws IOException, EccezioneClassificaVuota{
 		this.comunicazione = comunicazione;
 		this.crediti = crediti;
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -218,7 +218,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 		else{
 			ok = comunicazione.logoutRmi();
 		}
-		if(ok){
+		if(!ok){
 			System.exit(0);
 		}
 	}
@@ -247,7 +247,9 @@ public class FramePrincipale extends JFrame implements Runnable{
 		}
 		else{
 			try {
+				System.out.println("sto per chiedere di giocare");
 				ok = comunicazione.giocoTombolaRmi(numCartelle);
+				System.out.println("richiesta gioco mandata");
 				if(ok){
 					situazioneTomb = comunicazione.aggTombolarmi();
 				}
@@ -265,23 +267,28 @@ public class FramePrincipale extends JFrame implements Runnable{
 					JOptionPane.showMessageDialog(null, "Sei in coda per giocare a tombola, attendi l'arrivo di un altro giocatore");
 					numSpawn++;
 				}
+				System.out.println(comunicazione.getTipoCom());
 				if(comunicazione.getTipoCom())
 				{
 
-					try {
+					
 						comunicazione.aggTombolaSocket();
-						situazioneTomb = comunicazione.riceviAggTombolaSocket();
-					} catch (IOException e) {
-						System.out.println("impossibile inviare richiesta di gioco tombola");
-					}
+						try {
+							situazioneTomb = comunicazione.riceviAggTombolaSocket();
+						} catch (IOException e) {
+							System.out.println("impossibile ricevere aggiornamento tombola");
+						}
+					
 				}
 				else{
 					try {
 						situazioneTomb = comunicazione.aggTombolarmi();
 					} catch (RemoteException e) {
-						System.out.println("impossibile inviare richiesta di gioco tombola");
+						e.printStackTrace();
+						System.out.println("impossibile ricevere aggiornamento tombola");
 					}
 				}
+
 			}
 			tombola = new TombolaGui(numCartelle,situazioneTomb,comunicazione);
 			Thread t = new Thread(tombola);

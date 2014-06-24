@@ -165,7 +165,10 @@ public class Comunicazione {
 	}
 	
 	public SituazioneTombola aggTombolarmi() throws RemoteException{
-		return server.aggTombola();
+		System.out.println("qui in richiesta di aggiornamento");
+		SituazioneTombola sit = server.aggTombola();
+		System.out.println(sit);
+		return sit;
 	}
 	
 	public SituazioneRubamazzo aggRubamazzoRmi() throws RemoteException{

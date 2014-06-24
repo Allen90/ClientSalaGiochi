@@ -79,18 +79,18 @@ public class LoginGui extends JFrame {
 			}
 			else{
 				try {
-					
+					System.out.println("qui in rmi");
 					if (System.getSecurityManager() == null) 
 						System.setSecurityManager(new SecurityManager()); 
 					Registry registry = LocateRegistry.getRegistry(host); 
-					//Recupero l’istanza della classe remota 
 					RmiServer server = (RmiServer) registry.lookup(url);
+					System.out.println("sto per effettuare il login");
 					rmi = server.login(textUsername.getText(), textPassword.getText());
-					//rmi = comunicazione.registraRmi(textUsername.getText(), textPassword.getText(), textConfPass.getText(), textNome.getText(), textCognome.getText());
 					if(rmi == null){
 						JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 					}
 					else{
+						System.out.println("login effettuato");
 						Comunicazione c = new Comunicazione(rmi);
 						InfoHome ih = c.getInfoHome();
 						home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);

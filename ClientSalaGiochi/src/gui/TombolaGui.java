@@ -587,6 +587,12 @@ public class TombolaGui extends JFrame implements Runnable{
 		contentPane.add(label);
 
 		combo3 = new JComboBox();
+		combo3.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				int n = combo1.getSelectedIndex();
+				aggiorna3(n);
+			}
+		});
 		combo3.setEnabled(false);
 		combo3.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
 		combo3.setBounds(311, 416, 53, 24);
@@ -597,6 +603,12 @@ public class TombolaGui extends JFrame implements Runnable{
 		contentPane.add(label_1);
 
 		combo4 = new JComboBox();
+		combo4.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				int n = combo1.getSelectedIndex();
+				aggiorna4(n);
+			}
+		});
 		combo4.setEnabled(false);
 		combo4.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
 		combo4.setBounds(311, 645, 53, 24);
@@ -607,6 +619,12 @@ public class TombolaGui extends JFrame implements Runnable{
 		contentPane.add(label_2);
 
 		combo2 = new JComboBox();
+		combo2.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				int n = combo1.getSelectedIndex();
+				aggiorna2(n);
+			}
+		});
 		combo2.setEnabled(false);
 		combo2.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
 		combo2.setBounds(692, 193, 53, 24);
@@ -742,7 +760,7 @@ public class TombolaGui extends JFrame implements Runnable{
 	}
 
 	public void aggiorna2(int n){
-		int vincente[] = situazione.getTabella(0).getVincente();
+		int vincente[] = situazione.getTabella(1).getVincente();
 		if(vincente[n] == 2 && situazione.getPremiDisponibili()[0] == true)
 			btnAmbo2.setEnabled(true);
 		else 
@@ -773,7 +791,7 @@ public class TombolaGui extends JFrame implements Runnable{
 	}
 
 	public void aggiorna3(int n){
-		int vincente[] = situazione.getTabella(0).getVincente();
+		int vincente[] = situazione.getTabella(2).getVincente();
 		if(vincente[n] == 2 && situazione.getPremiDisponibili()[0] == true)
 			btnAmbo3.setEnabled(true);
 		else 
@@ -805,7 +823,7 @@ public class TombolaGui extends JFrame implements Runnable{
 	}
 
 	public void aggiorna4(int n){
-		int vincente[] = situazione.getTabella(0).getVincente();
+		int vincente[] = situazione.getTabella(3).getVincente();
 		if(vincente[n] == 2 && situazione.getPremiDisponibili()[0] == true)
 			btnAmbo4.setEnabled(true);
 		else 
@@ -914,11 +932,8 @@ public class TombolaGui extends JFrame implements Runnable{
 			} catch (IOException | InterruptedException e) {
 				System.out.println("impossibile aggiornare da server");
 			}
-
-			System.out.println("Suca");
 			aggiornaTabellone();
 			lblUltimoEstratto.setText(""+situazione.getUltimoEstratto());
-			System.out.println("@@@@ "+numCartelle);
 			switch(numCartelle){
 			case 1:{
 				aggiorna1(combo1.getSelectedIndex());
@@ -941,14 +956,16 @@ public class TombolaGui extends JFrame implements Runnable{
 					pnlTabellina2.add(tabellina2.get(i));
 				}
 				revalidate();
-				break;}
+				break;
+				}
 			case 3:{
 				aggiorna1(combo1.getSelectedIndex());
 				aggiorna2(combo2.getSelectedIndex());
 				aggiorna3(combo3.getSelectedIndex());
 				aggiornaCartella(tabellina1,0);
 				aggiornaCartella(tabellina2,1);
-				aggiornaCartella(tabellina3,2);pnlTabellina1.removeAll();
+				aggiornaCartella(tabellina3,2);
+				pnlTabellina1.removeAll();
 				pnlTabellina2.removeAll();
 				pnlTabellina3.removeAll();for(int i = 0; i<27; i++){
 					pnlTabellina1.add(tabellina1.get(i));

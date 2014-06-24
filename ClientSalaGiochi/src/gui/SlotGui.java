@@ -1,9 +1,5 @@
 package gui;
 
-
-//l'oggetto SlotFrame nel costruttore ha il riferimento al frame principale, per l'aggionamento dei crediti
-
-
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Window;
