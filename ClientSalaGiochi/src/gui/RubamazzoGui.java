@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import javax.swing.JTextPane;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import rubamazzo.Carta;
@@ -27,6 +26,8 @@ import rubamazzo.Mossa;
 import rubamazzo.SituazioneRubamazzo;
 
 import comunicazione.Comunicazione;
+import comunicazione.InvioMosseRubamazzo;
+import eccezioni.EccezioneUtente;
 
 public class RubamazzoGui extends JFrame implements Runnable{
 
@@ -42,14 +43,15 @@ public class RubamazzoGui extends JFrame implements Runnable{
 	private ArrayList<JLabel> labelCarteAvversari;
 	private JPanel panelRadioAvversari;
 	private ArrayList<JRadioButton> radioCarteAvversari;
-	int avversarioSel;
-
+	private int avversarioSel;
+	private boolean primoAvvio;
+	
 	//panel del banco
 	private JPanel panelCarteBanco;
 	private ArrayList<JLabel> labelCarteBanco;
 	private JPanel panelCheckBanco;
 	private ArrayList<JCheckBox> checkCarteBanco;
-	ArrayList<Boolean> bancoSel;
+	private ArrayList<Boolean> bancoSel;
 
 	//panel della propria mano
 	private JPanel panelCarteMano;
@@ -58,7 +60,7 @@ public class RubamazzoGui extends JFrame implements Runnable{
 	private ArrayList<JRadioButton> radioCarteMano;
 	private JPanel panelBottino;
 	private JLabel labelBottino;
-	int manoSel;
+	private int manoSel;
 
 	//pannelli bottone gioca e log 
 	private JPanel panelBottoneGioco;
@@ -72,10 +74,12 @@ public class RubamazzoGui extends JFrame implements Runnable{
 	private boolean ok = false;
 	private JLabel labelTurno;
 
+	private InvioMosseRubamazzo imr;
 
 	public RubamazzoGui(Comunicazione comunicazione, SituazioneRubamazzo situazione) {
 		
-		System.out.println("Creo la gui");
+		imr = new InvioMosseRubamazzo(comunicazione);
+		primoAvvio = true;
 		
 		this.comunicazione = comunicazione;
 		this.situazione = situazione;
@@ -157,7 +161,7 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		
 		labelTurno = new JLabel("");
 		labelTurno.setHorizontalAlignment(SwingConstants.CENTER);
-		labelTurno.setBounds(124, 215, 46, 14);
+		labelTurno.setBounds(103, 195, 78, 34);
 		panelBottoneGioco.add(labelTurno);
 
 		panelLog = new JPanel();
@@ -168,9 +172,7 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		textPaneLog = new JTextPane();
 		panelLog.add(textPaneLog);
 		
-		System.out.println("gui creata, aggiorno il tavolo");
 		aggiornaTavolo();
-		System.out.println("tavolo aggiornato");
 	}
 
 	private int getIndiceSelezionato(ArrayList<JRadioButton> gruppo){
@@ -194,23 +196,28 @@ public class RubamazzoGui extends JFrame implements Runnable{
 	
 	public void aggiornaTavolo(){
 		
-		//panel dei bottini avversari
 		JRadioButton temp;
-	
-		avversarioSel = getIndiceSelezionato(radioCarteAvversari);
 		
-		panelCarteAvversari.removeAll();							
+		//panel dei bottini avversari
+		panelCarteAvversari.removeAll();	
 		
-		labelCarteAvversari.removeAll(labelCarteAvversari);		
+		if(!primoAvvio)
+			avversarioSel = getIndiceSelezionato(radioCarteAvversari);
 		
+		labelCarteAvversari.removeAll(labelCarteAvversari);	
+		
+		System.out.println("CARTE BOTTINI ALTRUI");
 		for(int i = 0; i < situazione.getBottiniAltrui().size(); i++){	
+			
+			System.out.println(situazione.getBottiniAltrui().get(i).toString());
+
 			labelCarteAvversari.add(new JLabel());
 			labelCarteAvversari.get(i).setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getBottiniAltrui().get(i)))));
 			labelCarteAvversari.get(i).setToolTipText(situazione.getBottiniAltrui().get(i).toString());
 			labelCarteAvversari.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			panelCarteAvversari.add(labelCarteAvversari.get(i));	
 		}
-
+		
 		panelRadioAvversari.removeAll();
 		
 		for(int i = 0; i < radioCarteAvversari.size(); i++){
@@ -226,11 +233,9 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			bgCarteAvversari.add(radioCarteAvversari.get(i));
 		}
 		
+		avversarioSel = getIndiceSelezionato(radioCarteAvversari);
+				
 		//panel del banco
-		
-		for(JCheckBox cb: checkCarteBanco)
-			bancoSel.add(new Boolean(cb.isSelected()));
-		
 		panelCarteBanco.removeAll();
 		
 		labelCarteBanco.removeAll(labelCarteBanco);
@@ -242,8 +247,14 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			labelCarteBanco.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			panelCarteBanco.add(labelCarteBanco.get(i));
 		}
-		
+				
 		panelCheckBanco.removeAll();
+		
+		if(!primoAvvio){
+			bancoSel.removeAll(bancoSel);
+			for(JCheckBox cb: checkCarteBanco)
+				bancoSel.add(new Boolean(cb.isSelected()));
+		}
 		
 		checkCarteBanco.removeAll(checkCarteBanco);	
 		
@@ -251,12 +262,17 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			checkCarteBanco.add(new JCheckBox(""));
 			panelCheckBanco.add(checkCarteBanco.get(i));
 			checkCarteBanco.get(i).setHorizontalAlignment(SwingConstants.CENTER);
+			checkCarteBanco.get(i).setEnabled(true);
 		}
 		
+		for(JCheckBox cb: checkCarteBanco)
+			bancoSel.add(new Boolean(cb.isSelected()));
+				
 		//panel della propria mano
 		panelCarteMano.removeAll();
-
-		manoSel = getIndiceSelezionato(radioCarteMano);
+		
+		if(!primoAvvio)
+			manoSel = getIndiceSelezionato(radioCarteMano);
 		
 		labelCarteMano.removeAll(labelCarteMano);
 		
@@ -282,6 +298,7 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			radioCarteMano.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			bgMano.add(radioCarteMano.get(i));
 		}
+		System.out.println("" + situazione.getMioBottino());
 		if(situazione.getMioBottino() != null){
 			labelBottino.setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getMioBottino()))));
 			labelBottino.setToolTipText(situazione.getMioBottino().toString());
@@ -294,6 +311,7 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		//pannelli bottone gioca e log 
 		buttonGioco.setEnabled(situazione.getAbilitato());
 		labelTurno = new JLabel();
+		labelTurno.setVisible(true);
 		if(situazione.getAbilitato())
 			labelTurno.setText("E' il tuo turno!");
 		else 
@@ -301,10 +319,16 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		
 		//refresh
 		
-		for(int i = 0; i < checkCarteBanco.size(); i++)
-			checkCarteBanco.get(i).setEnabled(bancoSel.get(i));
-		setSelRadio(manoSel, avversarioSel);
-		
+		if(primoAvvio){
+			resetSelRadio();
+
+		}else{ 
+			for(int i = 0; i < checkCarteBanco.size(); i++){
+				checkCarteBanco.get(i).setSelected(bancoSel.get(i));
+			}
+			setSelRadio(manoSel, avversarioSel);
+		}
+		primoAvvio = false;
 		revalidate();
 	}
 	
@@ -333,7 +357,16 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		}else
 			return 3;
 	}
-
+	
+	public void resetSelRadio(){
+		for(int i = 0; i < radioCarteMano.size(); i++){
+			radioCarteMano.get(i).setSelected(false);
+		}
+		for(int i = 0; i < radioCarteAvversari.size(); i++){
+			radioCarteAvversari.get(i).setSelected(false);
+		}
+	}
+	
 	public void setSelRadio(int mano, int avversari){
 		for(int i = 0; i < radioCarteMano.size(); i++){
 			if(i == mano)
@@ -349,10 +382,15 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		}
 	}
 	
+	public void resetSelCheck(){
+		for(int i = 0; i < checkCarteBanco.size(); i++){
+			checkCarteBanco.get(i).setSelected(false);
+		}
+	}
+	
 	public void gioca(){
-
+		System.out.println("bottone cliccato");
 		bersagli = new ArrayList<>();
-		giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
 		switch(getTipoMossa()){
 		case -2:
 			JOptionPane.showMessageDialog(null, "Scegli una carta da giocare");
@@ -361,54 +399,67 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			JOptionPane.showMessageDialog(null, "Scegli correttamente il bersaglio della mossa");
 			break;
 		case 0:
+			giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
 			mossa = new Mossa(giocata);
+			System.out.println("mossa creata \ncarta giocata "+ giocata.toString());
 			break;
 		case 1:
+			giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
 			for(int i = 0; i < situazione.getBanco().size(); i++)
 				if(checkCarteBanco.get(i).isSelected())
 					bersagli.add(new Carta(labelCarteBanco.get(i).getToolTipText()));
 			mossa = new Mossa(giocata, bersagli.get(0));
 			break;
 		case 2:
+			giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
 			for(int i = 0; i < situazione.getBanco().size(); i++)
 				if(checkCarteBanco.get(i).isSelected())
 					bersagli.add(new Carta(labelCarteBanco.get(i).getToolTipText()));
 			mossa = new Mossa(giocata, bersagli);
 			break;
 		case 3:
+			giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
 			bersaglio = getIndiceSelezionato(radioCarteAvversari);
 			mossa = new Mossa(giocata, bersaglio);
 			break;
 		}
 		
-		if(comunicazione.getTipoCom()){
-			comunicazione.mossaRubamazzoSocket(mossa, situazione.getPartita());
-			try {
-				ok = comunicazione.riceviMossaRubamazzo();
-			} catch (IOException e) {
-				e.printStackTrace();
+		try {
+			if(getTipoMossa() >= 0){
+				ok = imr.invio(mossa, situazione.getPartita());
+				if(!ok)
+					JOptionPane.showMessageDialog(null, "Mossa illegale");
 			}
-		} else
-			try {
-				ok =comunicazione.mossaRubamazzoRmi(mossa, situazione.getPartita());
-			} catch (RemoteException e) {
-				e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (EccezioneUtente e) {
+			e.printStackTrace();
+		}
+		try {
+			if(comunicazione.getTipoCom()){
+				comunicazione.aggRubamazzoSocket();
+				situazione = comunicazione.riceviAggRubamazzoSocket();
 			}
-		if(!ok){
-			JOptionPane.showMessageDialog(null, "Mossa illegale");
+			else {
+				situazione = comunicazione.aggRubamazzoRmi();
+			}
+		} catch (IOException e) {
+			System.out.println("impossibile ricevere dal server l'aggiornamento rubamazzo");
+			e.printStackTrace();
+		}
+		if(ok){
+			resetSelCheck();
+			resetSelRadio();
 		}
 	}
 	
 	public void run(){
 		while(true){
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(500);
 				if(comunicazione.getTipoCom()){
-					System.out.println("sto per mandare la richiesta di aggiornamento");
 					comunicazione.aggRubamazzoSocket();
-					System.out.println("richiesta di aggiornamento mandata");
 					situazione = comunicazione.riceviAggRubamazzoSocket();
-					System.out.println("aggiornamento ricevuto");
 				}
 				else {
 					situazione = comunicazione.aggRubamazzoRmi();
@@ -420,9 +471,7 @@ public class RubamazzoGui extends JFrame implements Runnable{
 				System.out.println("impossibile ricevere dal server l'aggiornamento rubamazzo");
 				e.printStackTrace();
 			}
-			System.out.println("sto per aggiornare il tavolo");
 			aggiornaTavolo();
-			System.out.println("tavolo aggiornato");
 		}
 	}
 }
