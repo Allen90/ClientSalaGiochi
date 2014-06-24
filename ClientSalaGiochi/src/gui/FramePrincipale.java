@@ -398,8 +398,13 @@ public class FramePrincipale extends JFrame implements Runnable{
 			}
 			
 			if(comunicazione.getTipoCom()){
-				comunicazione.getInfoHomeSocket();
-				ih = comunicazione.riceviInfoHome();
+				comunicazione.getCreditiAgg();
+				try {
+					crediti = comunicazione.riceviCreditiAgg();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else{
 				try {

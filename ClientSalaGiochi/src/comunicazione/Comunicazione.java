@@ -229,13 +229,13 @@ public class Comunicazione {
 		return server.logout();
 	}
 	
-	public void getInfoHomeSocket(){
-		writer.append(Encoder.clientGetInfoHome);
+	public void getCreditiAgg(){
+		writer.println(Encoder.clientAggCrediti);
 	}
 	
-	public InfoHome riceviInfoHome(){
+	public int riceviCreditiAgg() throws IOException{
 		String s = reader.readLine();
-		return Decoder.clientInfoHome(s);
+		return Decoder.clientAggCrediti(s);
 	}
 	
 
