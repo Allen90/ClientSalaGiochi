@@ -1,20 +1,18 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import rmiServer.RmiServer;
 import rmiServer.RmiTaskControl;
 import userModel.InfoHome;
-import userModel.Utente;
+
 import comunicazione.Comunicazione;
 import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
@@ -29,11 +27,13 @@ import java.rmi.registry.Registry;
 import java.text.ParseException;
 
 public class LoginGui extends JFrame {
+
+	private static final long serialVersionUID = 1L;
 	private static final String host = "127.0.0.1";
 	private static final String url = "rmi://127.0.0.1/server";
 	private JPanel contentPane;
 	private JTextField textUsername;
-	private JTextField textPassword;
+	private JPasswordField textPassword;
 	private Comunicazione comunicazione;
 	private FramePrincipale home;
 	private RmiTaskControl rmi;
@@ -48,7 +48,7 @@ public class LoginGui extends JFrame {
 	 */
 	
 	public void invioLogin() throws ParseException, IOException, EccezioneClassificaVuota, NotBoundException{
-		if(textUsername.getText() == "" && textPassword.getText() == ""){
+		if(textUsername.getText() == "" && textPassword.getPassword().toString() == ""){
 			JOptionPane.showMessageDialog(null, "riempi i campi username e password");
 		}
 
@@ -56,9 +56,9 @@ public class LoginGui extends JFrame {
 			if(comunicazione.getTipoCom()){
 				System.out.println(""+comunicazione.getTipoCom());
 				System.out.println("qui prima di richiesta login");
-				comunicazione.loginSocket(textUsername.getText(),textPassword.getText());
+				comunicazione.loginSocket(textUsername.getText(),textPassword.getPassword().toString());
 				System.out.println("qui dopo richiesta login");
-				Utente utente = null;
+	
 				InfoHome ih = null;
 				try {
 					System.out.println("qui prima di risposta server");
@@ -85,7 +85,7 @@ public class LoginGui extends JFrame {
 					Registry registry = LocateRegistry.getRegistry(host); 
 					RmiServer server = (RmiServer) registry.lookup(url);
 					System.out.println("sto per effettuare il login");
-					rmi = server.login(textUsername.getText(), textPassword.getText());
+					rmi = server.login(textUsername.getText(), textPassword.getPassword().toString());
 					if(rmi == null){
 						JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 					}
@@ -128,7 +128,7 @@ public class LoginGui extends JFrame {
 		contentPane.add(textUsername);
 		textUsername.setColumns(10);
 
-		textPassword = new JTextField();
+		textPassword = new JPasswordField();
 		textPassword.setBounds(111, 92, 114, 19);
 		contentPane.add(textPassword);
 		textPassword.setColumns(10);
