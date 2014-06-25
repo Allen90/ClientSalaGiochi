@@ -37,6 +37,7 @@ import javax.swing.SwingConstants;
 
 import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
+import javax.swing.ImageIcon;
 
 public class FramePrincipale extends JFrame implements Runnable{
 
@@ -58,6 +59,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 	private JButton btnRubamazzo;
 	private InfoHome ih;
 	private JLabel labelCrediti;
+	private JButton btnAggClass;
 	/**
 	 * Create the frame.
 	 * @throws IOException 
@@ -174,20 +176,26 @@ public class FramePrincipale extends JFrame implements Runnable{
 		pnlClassifica.add(lblGlobale);
 
 		JLabel lblGiornaliera = new JLabel("Giornaliera");
-		lblGiornaliera.setBounds(240, 12, 99, 15);
+		lblGiornaliera.setBounds(204, 12, 99, 15);
 		pnlClassifica.add(lblGiornaliera);
 
 		areaGlobale = new JTextArea();
 		areaGlobale.setEditable(false);
-		areaGlobale.setBounds(12, 39, 170, 193);
+		areaGlobale.setBounds(12, 39, 141, 193);
 		pnlClassifica.add(areaGlobale);
 
 		areaGiornaliera = new JTextArea();
-		areaGiornaliera.setBounds(240, 39, 191, 193);
+		areaGiornaliera.setBounds(204, 39, 160, 193);
 		pnlClassifica.add(areaGiornaliera);
 
-		JButton btnAggClass = new JButton("A");
-		btnAggClass.setBounds(407, 7, 24, 25);
+		btnAggClass = new JButton("");
+		btnAggClass.setIcon(new ImageIcon("/home/fritz/Scaricati/refresh-icon-614x460.png"));
+		btnAggClass.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				aggiornaClassifica();
+			}
+		});
+		btnAggClass.setBounds(391, 12, 40, 40);
 		pnlClassifica.add(btnAggClass);
 
 		if(comunicazione.getTipoCom()){
@@ -206,6 +214,30 @@ public class FramePrincipale extends JFrame implements Runnable{
 			areaGiornaliera.append(classGiorn.get(i).toString()+"\n");
 		}
 
+	}
+	
+	public void aggiornaClassifica(){
+		if(comunicazione.getTipoCom()){
+			comunicazione.aggClassSocket();
+			try {
+				classGlob = comunicazione.riceviClassificaGlobaleSocket();
+				classGiorn = comunicazione.riceviClassificaGiornalieraSocket();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else{
+			try {
+				classGiorn = comunicazione.aggClassGlobaleRmi();
+				classGlob = comunicazione.aggClassGiornRmi();
+			} catch (EccezioneClassificaVuota | RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		
 	}
 
 
@@ -376,26 +408,6 @@ public class FramePrincipale extends JFrame implements Runnable{
 				e.printStackTrace();
 			}
 
-			if(comunicazione.getTipoCom()){
-				comunicazione.aggClassSocket();
-				try {
-					classGlob = comunicazione.riceviClassificaGlobaleSocket();
-					classGiorn = comunicazione.riceviClassificaGiornalieraSocket();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			else{
-				try {
-					classGiorn = comunicazione.aggClassGlobaleRmi();
-					classGlob = comunicazione.aggClassGiornRmi();
-				} catch (EccezioneClassificaVuota | RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
 			System.out.println("qui in aggiornamento crediti");
 			if(comunicazione.getTipoCom()){
 				System.out.println("sto per richiedere i crediti aggiornati");
