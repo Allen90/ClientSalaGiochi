@@ -57,7 +57,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 	private SituazioneRubamazzo situazioneRuba;
 	private JButton btnRubamazzo;
 	private InfoHome ih;
-
+	private JLabel labelCrediti;
 	/**
 	 * Create the frame.
 	 * @throws IOException 
@@ -105,7 +105,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 		Crediti.setBounds(12, 36, 70, 15);
 		pnlHome.add(Crediti);
 
-		JLabel labelCrediti = new JLabel(""+crediti);
+		labelCrediti = new JLabel(""+crediti);
 		labelCrediti.setBounds(75, 36, 70, 15);
 		pnlHome.add(labelCrediti);
 
@@ -401,6 +401,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 				comunicazione.getCreditiAgg();
 				try {
 					crediti = comunicazione.riceviCreditiAgg();
+					labelCrediti.setText(""+crediti);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -409,6 +410,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 			else{
 				try {
 					ih = comunicazione.getInfoHome();
+					labelCrediti.setText(""+ih.getCrediti());
 				} catch (RemoteException | EccezioneUtente e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -422,6 +424,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 				areaGlobale.append(classGlob.get(i).toString()+"\n");
 				areaGiornaliera.append(classGiorn.get(i).toString()+"\n");
 			}
+			revalidate();
 		}
 	}
 }
