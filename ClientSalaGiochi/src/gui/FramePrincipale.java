@@ -396,12 +396,16 @@ public class FramePrincipale extends JFrame implements Runnable{
 				}
 
 			}
-			
+			System.out.println("qui in aggiornamento crediti");
 			if(comunicazione.getTipoCom()){
+				System.out.println("sto per richiedere i crediti aggiornati");
 				comunicazione.getCreditiAgg();
 				try {
 					crediti = comunicazione.riceviCreditiAgg();
+					System.out.println("crediti aggiornati");
+					System.out.println(crediti);
 					labelCrediti.setText(""+crediti);
+					revalidate();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -411,6 +415,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 				try {
 					ih = comunicazione.getInfoHome();
 					labelCrediti.setText(""+ih.getCrediti());
+					revalidate();
 				} catch (RemoteException | EccezioneUtente e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -424,7 +429,7 @@ public class FramePrincipale extends JFrame implements Runnable{
 				areaGlobale.append(classGlob.get(i).toString()+"\n");
 				areaGiornaliera.append(classGiorn.get(i).toString()+"\n");
 			}
-			revalidate();
+			
 		}
 	}
 }

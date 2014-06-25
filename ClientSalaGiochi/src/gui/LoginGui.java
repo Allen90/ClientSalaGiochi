@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import rmiServer.RmiServer;
 import rmiServer.RmiTaskControl;
 import userModel.InfoHome;
-
 import comunicazione.Comunicazione;
 import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
@@ -71,6 +70,8 @@ public class LoginGui extends JFrame {
 					else{
 						home = new FramePrincipale(ih.getNome(),ih.getCrediti(),comunicazione);
 						home.setVisible(true);
+						Thread t = new Thread(home);
+						t.start();
 						this.setVisible(false);
 					}
 				} catch (IOException e1) {
@@ -95,6 +96,8 @@ public class LoginGui extends JFrame {
 						Comunicazione c = new Comunicazione(rmi);
 						InfoHome ih = c.getInfoHome();
 						home = new FramePrincipale(ih.getNome(),ih.getCrediti(),c);
+						Thread t = new Thread(home);
+						t.start();
 						home.setVisible(true);
 						this.setVisible(false);
 					}

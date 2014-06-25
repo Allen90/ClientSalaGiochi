@@ -75,6 +75,8 @@ public class RegisterGui extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+					Thread t = new Thread(home);
+					t.start();
 					home.setVisible(true);
 					this.setVisible(false);
 				}

@@ -96,7 +96,7 @@ public class TombolaGui extends JFrame implements Runnable{
 		this.numCartelle = numCartelle;
 		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 781, 840);
+		setBounds(100, 100, 781, 724);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -629,46 +629,6 @@ public class TombolaGui extends JFrame implements Runnable{
 		combo2.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
 		combo2.setBounds(692, 193, 53, 24);
 		contentPane.add(combo2);
-
-		JLabel lblAmbo = new JLabel("Ambo:");
-		lblAmbo.setBounds(12, 684, 70, 15);
-		contentPane.add(lblAmbo);
-
-		JLabel lblPremioAmbo = new JLabel("New label");
-		lblPremioAmbo.setBounds(66, 684, 70, 15);
-		contentPane.add(lblPremioAmbo);
-
-		JLabel lblTerna = new JLabel("Terna:");
-		lblTerna.setBounds(151, 684, 70, 15);
-		contentPane.add(lblTerna);
-
-		JLabel lblPremioTerna = new JLabel("New label");
-		lblPremioTerna.setBounds(205, 684, 70, 15);
-		contentPane.add(lblPremioTerna);
-
-		JLabel lblQuaterna = new JLabel("Quaterna:");
-		lblQuaterna.setBounds(288, 684, 93, 15);
-		contentPane.add(lblQuaterna);
-
-		JLabel lblPremioQuaterna = new JLabel("New label");
-		lblPremioQuaterna.setBounds(372, 684, 70, 15);
-		contentPane.add(lblPremioQuaterna);
-
-		JLabel lblCinquina = new JLabel("Cinquina:");
-		lblCinquina.setBounds(454, 684, 70, 15);
-		contentPane.add(lblCinquina);
-
-		JLabel lblPremioCinquina = new JLabel("New label");
-		lblPremioCinquina.setBounds(532, 684, 70, 15);
-		contentPane.add(lblPremioCinquina);
-
-		JLabel lblTombola = new JLabel("Tombola:");
-		lblTombola.setBounds(614, 684, 70, 15);
-		contentPane.add(lblTombola);
-
-		JLabel lblPremioTombola = new JLabel("New label");
-		lblPremioTombola.setBounds(686, 684, 70, 15);
-		contentPane.add(lblPremioTombola);
 
 
 		//		for(int i = 0;i< 27; i++){
