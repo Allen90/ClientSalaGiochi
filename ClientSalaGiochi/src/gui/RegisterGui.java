@@ -27,8 +27,8 @@ import java.text.ParseException;
 public class RegisterGui extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static final String host = "127.0.0.1";
-	private static final String url = "rmi://127.0.0.1/server";
+//	private static final String host = "127.0.0.1";
+//	private static final String url = "rmi://127.0.0.1/server";
 	private JPanel contentPane;
 	private JTextField textNome;
 	private JTextField textCognome;
@@ -37,7 +37,7 @@ public class RegisterGui extends JFrame {
 	private JPasswordField textConfPass;
 	private Comunicazione comunicazione;
 	private FramePrincipale home;
-
+	private String ip;
 
 	private RmiTaskControl rmi;
 	private JButton btnRegistra;
@@ -48,14 +48,13 @@ public class RegisterGui extends JFrame {
 	 * @throws ParseException 
 	 */
 	public void inviaRegistrazione() throws NotBoundException, ParseException{
-		if(!(textUsername.getText().isEmpty() && textPassword.getPassword().toString().isEmpty() && textNome.getText().isEmpty() && textCognome.getText().isEmpty() && textConfPass.getPassword().toString().isEmpty())){
+		if(!(textUsername.getText().isEmpty() && String.valueOf(textPassword.getPassword()).isEmpty() && textNome.getText().isEmpty() && textCognome.getText().isEmpty() && textConfPass.getPassword().toString().isEmpty())){
 			JOptionPane.showMessageDialog(null, "Dati registrazione incompleti, riempi tutti i campi!");
 		}
 
 		else{
 			if(comunicazione.getTipoCom()){
-				System.out.println("qui in socket");
-				comunicazione.registraSocket(textUsername.getText(), textPassword.getPassword().toString(), textConfPass.getPassword().toString(), textNome.getText(), textCognome.getText());
+				comunicazione.registraSocket(textUsername.getText(), String.valueOf(textPassword.getPassword()), textConfPass.getPassword().toString(), textNome.getText(), textCognome.getText());
 				InfoHome ih = null;
 				try {
 					ih = comunicazione.riceviRegistraSocket();
@@ -67,7 +66,6 @@ public class RegisterGui extends JFrame {
 					e1.printStackTrace();
 				}
 				if(ih == null){
-					System.out.println("qui in ih = null");
 					JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 				}
 				else{
@@ -82,15 +80,14 @@ public class RegisterGui extends JFrame {
 				}
 			}
 			else{
-				System.out.println("qui in rmi");
 				try {
 					if (System.getSecurityManager() == null) 
 						System.setSecurityManager(new SecurityManager()); 
-					Registry registry = LocateRegistry.getRegistry(host); 
+					Registry registry = LocateRegistry.getRegistry(ip); 
 					//Recupero l’istanza della classe remota 
-					RmiServer server = (RmiServer) registry.lookup(url);
-					rmi = server.registra(textUsername.getText(), textPassword.getPassword().toString(), textConfPass.getPassword().toString(), textNome.getText(), textCognome.getText());
-					//rmi = comunicazione.registraRmi(textUsername.getText(), textPassword.getPassword().toString(), textConfPass.getPassword().toString(), textNome.getText(), textCognome.getText());
+					RmiServer server = (RmiServer) registry.lookup("rmi://"+ip+"/server");
+					rmi = server.registra(textUsername.getText(), String.valueOf(textPassword.getPassword()), textConfPass.getPassword().toString(), textNome.getText(), textCognome.getText());
+					//rmi = comunicazione.registraRmi(textUsername.getText(), String.valueOf(textPassword.getPassword()), textConfPass.getPassword().toString(), textNome.getText(), textCognome.getText());
 					if(rmi == null){
 						JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 					}
@@ -111,7 +108,8 @@ public class RegisterGui extends JFrame {
 
 	}
 
-	public RegisterGui( Comunicazione comunicazione) {
+	public RegisterGui(String ip, Comunicazione comunicazione) {
+		this.ip = ip;
 		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

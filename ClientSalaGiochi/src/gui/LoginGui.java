@@ -29,8 +29,8 @@ import java.text.ParseException;
 public class LoginGui extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static final String host = "127.0.0.1";
-	private static final String url = "rmi://127.0.0.1/server";
+//	private static final String host = "127.0.0.1";
+//	private static final String url = "rmi://127.0.0.1/server";
 	private JPanel contentPane;
 	private JTextField textUsername;
 	private JPasswordField textPassword;
@@ -38,6 +38,7 @@ public class LoginGui extends JFrame {
 	private FramePrincipale home;
 	private RmiTaskControl rmi;
 	private JButton btnLogin;
+	private String ip;
 
 	/**
 	 * Create the frame.
@@ -48,7 +49,7 @@ public class LoginGui extends JFrame {
 	 */
 	
 	public void invioLogin() throws ParseException, IOException, EccezioneClassificaVuota, NotBoundException{
-		if(textUsername.getText() == "" && textPassword.getPassword().toString() == ""){
+		if(textUsername.getText().isEmpty() && String.valueOf(textPassword.getPassword()).isEmpty()){
 			JOptionPane.showMessageDialog(null, "riempi i campi username e password");
 		}
 
@@ -56,7 +57,7 @@ public class LoginGui extends JFrame {
 			if(comunicazione.getTipoCom()){
 				System.out.println(""+comunicazione.getTipoCom());
 				System.out.println("qui prima di richiesta login");
-				comunicazione.loginSocket(textUsername.getText(),textPassword.getPassword().toString());
+				comunicazione.loginSocket(textUsername.getText(),String.valueOf(textPassword.getPassword()));
 				System.out.println("qui dopo richiesta login");
 	
 				InfoHome ih = null;
@@ -82,10 +83,10 @@ public class LoginGui extends JFrame {
 					System.out.println("qui in rmi");
 					if (System.getSecurityManager() == null) 
 						System.setSecurityManager(new SecurityManager()); 
-					Registry registry = LocateRegistry.getRegistry(host); 
-					RmiServer server = (RmiServer) registry.lookup(url);
+					Registry registry = LocateRegistry.getRegistry(ip); 
+					RmiServer server = (RmiServer) registry.lookup("rmi://"+ip+"/server");
 					System.out.println("sto per effettuare il login");
-					rmi = server.login(textUsername.getText(), textPassword.getPassword().toString());
+					rmi = server.login(textUsername.getText(), String.valueOf(textPassword.getPassword()));
 					if(rmi == null){
 						JOptionPane.showMessageDialog(null, "Errore nella registrazione");
 					}
@@ -106,7 +107,8 @@ public class LoginGui extends JFrame {
 	}
 	
 	
-	public LoginGui(Comunicazione comunicazione) {
+	public LoginGui(String ip, Comunicazione comunicazione) {
+		this.ip = ip;
 		this.comunicazione = comunicazione;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
