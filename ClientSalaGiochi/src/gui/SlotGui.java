@@ -152,7 +152,7 @@ public class SlotGui extends JFrame {
 			case 5:{lblSimb3.setIcon(new ImageIcon(SlotGui.class.getResource(dollaro)));break;}
 			}
 			if(r.getPremio() > 0)
-				JOptionPane.showMessageDialog(null, "hai vinto"+r.getPremio());
+				JOptionPane.showMessageDialog(null, "hai vinto "+r.getPremio()+" crediti!");
 			else JOptionPane.showMessageDialog(null, "non hai vinto nulla, ritenta!");
 			revalidate();
 		}
