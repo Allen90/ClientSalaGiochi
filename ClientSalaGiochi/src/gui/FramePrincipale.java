@@ -402,20 +402,16 @@ public class FramePrincipale extends JFrame implements Runnable{
 	public void run(){
 		while(finito == false){
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			System.out.println("qui in aggiornamento crediti");
 			if(comunicazione.getTipoCom()){
-				System.out.println("sto per richiedere i crediti aggiornati");
 				comunicazione.getCreditiAgg();
 				try {
 					crediti = comunicazione.riceviCreditiAgg();
-					System.out.println("crediti aggiornati");
-					System.out.println(crediti);
 					labelCrediti.setText(""+crediti);
 					revalidate();
 				} catch (IOException e) {

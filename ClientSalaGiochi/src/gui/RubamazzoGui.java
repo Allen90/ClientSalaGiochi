@@ -172,6 +172,25 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		textPaneLog = new JTextPane();
 		panelLog.add(textPaneLog);
 		
+		JButton buttonReset = new JButton("Reset");
+		buttonReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				resetSelRadio();
+				revalidate();
+			}
+		});
+		buttonReset.setBounds(48, 105, 89, 23);
+		contentPane.add(buttonReset);
+		
+		JLabel labelUsername = new JLabel(situazione.getUsername());
+		labelUsername.setBounds(10, 11, 46, 14);
+		contentPane.add(labelUsername);
+		
+		JLabel labelSelezione = new JLabel("Reset selezione");
+		labelSelezione.setHorizontalAlignment(SwingConstants.CENTER);
+		labelSelezione.setBounds(20, 87, 149, 14);
+		contentPane.add(labelSelezione);
+		
 		aggiornaTavolo();
 	}
 
@@ -228,9 +247,7 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			radioCarteAvversari.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			bgCarteAvversari.add(radioCarteAvversari.get(i));
 		}
-		
-		avversarioSel = getIndiceSelezionato(radioCarteAvversari);
-				
+						
 		//panel del banco
 		panelCarteBanco.removeAll();
 		
@@ -294,7 +311,7 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			radioCarteMano.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 			bgMano.add(radioCarteMano.get(i));
 		}
-		System.out.println("" + situazione.getMioBottino());
+
 		if(situazione.getMioBottino() != null){
 			labelBottino.setIcon(new ImageIcon(RubamazzoGui.class.getResource(getPath(situazione.getMioBottino()))));
 			labelBottino.setToolTipText(situazione.getMioBottino().toString());
@@ -324,10 +341,6 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			}
 			setSelRadio(manoSel, avversarioSel);
 		}
-		System.out.println("MIO INDICE: " + situazione.getMioIndice());
-		System.out.println("NUMERO GIOCATORI DA BOTTINI: "+situazione.getBottini().size());
-		System.out.println("NUMERO GIOCATORI DA BOTTINI ALTRUI: "+situazione.getBottiniAltrui().size());
-		System.out.println("MIO BOTTINO: "+ situazione.getMioBottino());
 		primoAvvio = false;
 		revalidate();
 	}
@@ -359,12 +372,14 @@ public class RubamazzoGui extends JFrame implements Runnable{
 	}
 	
 	public void resetSelRadio(){
-		for(int i = 0; i < radioCarteMano.size(); i++){
-			radioCarteMano.get(i).setSelected(false);
-		}
-		for(int i = 0; i < radioCarteAvversari.size(); i++){
-			radioCarteAvversari.get(i).setSelected(false);
-		}
+		bgMano.clearSelection();
+//		for(int i = 0; i < radioCarteMano.size(); i++){
+//			radioCarteMano.get(i).setSelected(false);
+//		}
+		bgCarteAvversari.clearSelection();
+//		for(int i = 0; i < radioCarteAvversari.size(); i++){
+//			radioCarteAvversari.get(i).setSelected(false);
+//		}
 	}
 	
 	public void setSelRadio(int mano, int avversari){
@@ -389,7 +404,6 @@ public class RubamazzoGui extends JFrame implements Runnable{
 	}
 	
 	public void gioca(){
-		System.out.println("bottone cliccato");
 		bersagli = new ArrayList<>();
 		switch(getTipoMossa()){
 		case -2:
@@ -401,7 +415,6 @@ public class RubamazzoGui extends JFrame implements Runnable{
 		case 0:
 			giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
 			mossa = new Mossa(giocata);
-			System.out.println("mossa creata \ncarta giocata "+ giocata.toString());
 			break;
 		case 1:
 			giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
@@ -419,7 +432,12 @@ public class RubamazzoGui extends JFrame implements Runnable{
 			break;
 		case 3:
 			giocata = new Carta(labelCarteMano.get(getIndiceSelezionato(radioCarteMano)).getToolTipText());
-			bersaglio = getIndiceSelezionato(radioCarteAvversari);
+			int indice = getIndiceSelezionato(radioCarteAvversari);
+			Carta temp = new Carta(labelCarteAvversari.get(indice).getToolTipText());
+			bersaglio = 0;
+			for(bersaglio = 0; bersaglio <situazione.getBottini().size(); bersaglio++)
+				if(temp.confrontaCarta(situazione.getBottini().get(bersaglio)))
+					break;
 			mossa = new Mossa(giocata, bersaglio);
 			break;
 		}
