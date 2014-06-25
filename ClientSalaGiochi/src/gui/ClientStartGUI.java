@@ -21,6 +21,13 @@ import javax.swing.JTextField;
 
 import eccezioni.EccezioneUtente;
 
+/**
+ * JFrame che permette l'esecuzione del client, in base alla scelta dell'utente tramite combobox
+ * viene deciso il tipo di comunicazione da utilizzare
+ * @author fritz
+ *
+ */
+
 public class ClientStartGUI {
 
 	private JFrame frame;

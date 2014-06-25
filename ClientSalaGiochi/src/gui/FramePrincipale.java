@@ -39,6 +39,13 @@ import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
 import javax.swing.ImageIcon;
 
+/**
+ * JFrame che rapprensenta l'interfaccia principale del gioco, in cui 
+ * l'utente potra' scegliere il gioco da eseguire o visualizzare le classifiche nell'apposito pannello
+ * @author fritz
+ *
+ */
+
 public class FramePrincipale extends JFrame implements Runnable{
 
 	private JPanel contentPane;

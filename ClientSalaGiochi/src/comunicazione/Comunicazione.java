@@ -8,8 +8,6 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.util.ArrayList;
-
-import rmiClient.ClientRmi;
 import rmiServer.RmiServer;
 import rmiServer.RmiTaskControl;
 import rubamazzo.Mossa;
@@ -18,11 +16,20 @@ import slot.Rollata;
 import tombola.SituazioneTombola;
 import userModel.EntryClassifica;
 import userModel.InfoHome;
-import userModel.Utente;
 import eccezioni.EccezioneClassificaVuota;
 import eccezioni.EccezioneUtente;
 import encodec.Decoder;
 import encodec.Encoder;
+
+/**
+ * classe per la gestione di tutti i metodi di comunicazione del client verso il server
+ * per itentificare un client socket rispetto ad uno rmi viene utilizato un boolean che
+ * verra' utilizzato ogni volta che si vorra' effettuare un invio al server, per distinguere quali
+ * tra i tipi di comunicazione utilizzare
+ * @author fritz
+ *
+ */
+
 
 public class Comunicazione {
 	
