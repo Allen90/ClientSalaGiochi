@@ -817,15 +817,6 @@ public class TombolaGui extends JFrame implements Runnable{
 
 	public boolean inviaVittoria(int numPartita,int tipoVittoria,int indiceCartella, int indiceRiga) throws IOException, EccezioneUtente{
 		boolean ok = false;
-		//		occupato = true;
-		//		if(comunicazione.getTipoCom()){
-		//			comunicazione.vintoTombolaSocket(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
-		//			response = comunicazione.riceviVintoTombola();
-		//		}
-		//		else{
-		//			response = comunicazione.vintoTombolaRmi(situazione.getNumeroPartita(), tipoVittoria, indiceCartella, indiceRiga);
-		//		}
-		//		System.out.println("ho ricevuto la risposta del server ");
 		ok = vittorie.invio(numPartita, tipoVittoria, indiceCartella, indiceRiga);
 		return ok;
 	}
@@ -834,9 +825,10 @@ public class TombolaGui extends JFrame implements Runnable{
 		Tabella t = situazione.getTabella(indice);
 		for(int i = 0;i< Tabella.N_RIGHE;i++){
 			for(int j=0;j<Tabella.N_COLONNE;j++){
-				//System.out.print(t.isEstratto(i-1, j-1));
-				tabellina.add(new JLabel(""+t.getNumero(i, j)));
-				//tabellina.set(i*j, new JLabel(""+t.getNumero(i-1, j-1)));
+				if(t.getNumero(i, j) == 0)
+					tabellina.add(new JLabel(""));
+				else
+					tabellina.add(new JLabel(""+t.getNumero(i, j)));
 				if(situazione.getTabella(indice).isEstratto(i,j)){
 					tabellina.get(i*9+j).setForeground(new Color(255, 0, 0));
 				}
